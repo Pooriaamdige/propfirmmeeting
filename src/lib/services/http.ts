@@ -1,18 +1,28 @@
 import "server-only";
 import { Agent, ProxyAgent, fetch as undiciFetch, type Dispatcher } from "undici";
+import { socksDispatcher } from "fetch-socks";
 
 /**
  * Outbound HTTP for data providers.
  *
- * Set OUTBOUND_PROXY_URL (e.g. http://user:pass@proxy.example:3128) to route all
- * provider requests through a proxy — needed when the server's IP is blocked by a
+ * Set OUTBOUND_PROXY_URL to route all provider requests through a proxy:
+ *   http://user:pass@host:3128   (HTTP/HTTPS proxy)
+ *   socks5://user:pass@host:1080 (SOCKS5, e.g. a local v2ray/xray client at socks5://127.0.0.1:10808)
+ * Needed when the server's IP is blocked by a
  * provider (Binance, Yahoo, Twelve Data and Forex Factory all geo-restrict some regions).
  */
 let dispatcher: Dispatcher | null = null;
 function getDispatcher(): Dispatcher {
   if (dispatcher) return dispatcher;
   const proxy = process.env.OUTBOUND_PROXY_URL;
-  dispatcher = proxy ? new ProxyAgent({ uri: proxy, connect: { timeout: 8000 } }) : new Agent({ connect: { timeout: 8000 } });
+  if (!proxy) dispatcher = new Agent({ connect: { timeout: 8000 } });
+  else if (/^socks(4|5|5h)?:\/\//i.test(proxy)) {
+    const u = new URL(proxy);
+    dispatcher = socksDispatcher(
+      { type: u.protocol.startsWith("socks4") ? 4 : 5, host: u.hostname, port: Number(u.port) || 1080, userId: decodeURIComponent(u.username) || undefined, password: decodeURIComponent(u.password) || undefined },
+      { connect: { timeout: 8000 } },
+    );
+  } else dispatcher = new ProxyAgent({ uri: proxy, connect: { timeout: 8000 } });
   return dispatcher;
 }
 

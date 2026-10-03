@@ -70,7 +70,7 @@ The browser only calls our own `/api/*` endpoints. The server fetches from provi
 - Every widget shows its source and the last update time. If every provider fails, the UI shows «اطلاعات لحظه‌ای موقتاً در دسترس نیست» with a retry button and never fake prices.
 - A failing provider is paused for a while (circuit breaker).
 - **Admin → Dashboard → «وضعیت داده‌های زنده»** shows each provider's last success and last error. Check it first if prices don't load.
-- **Servers in Iran:** Binance, Coinbase, Yahoo, Twelve Data and Forex Factory may block Iranian IPs. Set `OUTBOUND_PROXY_URL=http://user:pass@host:port` to a proxy outside the restricted region; all provider requests go through it.
+- **Servers in Iran:** Binance, Coinbase, Yahoo, Twelve Data and Forex Factory may block Iranian IPs. Set `OUTBOUND_PROXY_URL` to a proxy outside the restricted region (`http://user:pass@host:port` or `socks5://user:pass@host:port`, e.g. a local v2ray/xray client); all provider requests go through it.
 - The Twelve Data free tier (8 requests/min) is too small for 5-second polling of many symbols. Use a paid plan, or raise `MARKET_QUOTE_TTL_SECONDS`.
 
 ## Site structure
