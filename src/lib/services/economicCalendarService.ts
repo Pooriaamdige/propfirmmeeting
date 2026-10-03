@@ -3,12 +3,13 @@ import type { CalendarRange, DataEnvelope, EconomicEvent } from "@/lib/types";
 import { cached } from "@/lib/cache";
 import { dayKey } from "@/lib/format";
 import { ServiceUnavailableError } from "@/lib/services/errors";
+import { reportFailure, reportSuccess } from "@/lib/services/health";
 import type { CalendarProvider } from "./calendar/provider";
 import { forexFactoryProvider } from "./calendar/forexFactoryProvider";
 import { mockCalendarProvider } from "./calendar/mockProvider";
 
 function provider(): CalendarProvider {
-  const configured = process.env.CALENDAR_PROVIDER ?? (process.env.NODE_ENV === "production" ? "forexfactory" : "mock");
+  const configured = process.env.CALENDAR_PROVIDER ?? "forexfactory";
   return configured === "mock" ? mockCalendarProvider : forexFactoryProvider;
 }
 
@@ -16,7 +17,16 @@ async function weekEvents(p: CalendarProvider, week: "this" | "next"): Promise<{
   return cached(
     `calendar:${p.name}:${week}`,
     p.isMock ? 60_000 : 30 * 60_000,
-    async () => ({ events: await p.getEvents(week), fetchedAt: new Date().toISOString() }),
+    async () => {
+      try {
+        const events = await p.getEvents(week);
+        reportSuccess(p.name, "calendar");
+        return { events, fetchedAt: new Date().toISOString() };
+      } catch (err) {
+        reportFailure(p.name, "calendar", err);
+        throw err;
+      }
+    },
     6 * 3600_000,
   );
 }

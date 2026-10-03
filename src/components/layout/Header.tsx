@@ -49,7 +49,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
         <Logo />
 
-        <nav aria-label="ناوبری اصلی" className="ms-4 hidden lg:block">
+        <nav aria-label="ناوبری اصلی" className="ms-4 hidden xl:block">
           <ul className="flex items-center gap-0.5">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
@@ -74,21 +74,26 @@ export function Header() {
             aria-label="جستجو (Ctrl+K)"
           >
             <Icon name="search" size={16} />
-            <span className="hidden md:inline lg:hidden xl:inline">جستجو</span>
-            <kbd className="latin hidden whitespace-nowrap rounded border border-line px-1.5 text-[10px] text-faint md:inline lg:hidden xl:inline">Ctrl K</kbd>
+            <span className="hidden md:inline xl:hidden 2xl:inline">جستجو</span>
+            <kbd className="latin hidden whitespace-nowrap rounded border border-line px-1.5 text-[10px] text-faint md:inline xl:hidden 2xl:inline">Ctrl K</kbd>
           </button>
+          <Link href="/lottery/" className="relative hidden h-9 items-center gap-1.5 rounded-lg border border-accent-2/30 bg-accent-2/10 px-2.5 text-sm font-medium text-accent-2 transition hover:bg-accent-2/20 sm:inline-flex" aria-label="قرعه‌کشی">
+            <span className="absolute -end-1 -top-1 h-2 w-2 rounded-full bg-accent live-dot" aria-hidden />
+            <Icon name="gift" size={16} />
+            <span className="hidden 2xl:inline">قرعه‌کشی</span>
+          </Link>
           <ThemeToggle />
           <Link href="/login/" className="hidden h-9 items-center whitespace-nowrap rounded-lg bg-fg px-3.5 text-sm font-medium text-bg transition hover:opacity-90 sm:inline-flex">
             ورود / ثبت‌نام
           </Link>
-          <button onClick={() => setOpen((v) => !v)} className="flex h-9 w-9 items-center justify-center rounded-lg text-fg hover:bg-card lg:hidden" aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? "بستن منو" : "باز کردن منو"}>
+          <button onClick={() => setOpen((v) => !v)} className="flex h-9 w-9 items-center justify-center rounded-lg text-fg hover:bg-card xl:hidden" aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? "بستن منو" : "باز کردن منو"}>
             <Icon name={open ? "x" : "menu"} size={20} />
           </button>
         </div>
       </div>
 
       {/* Mobile navigation */}
-      <div id="mobile-nav" hidden={!open} className="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-bg lg:hidden">
+      <div id="mobile-nav" hidden={!open} className="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-bg xl:hidden">
         <nav aria-label="ناوبری موبایل" className="px-4 py-4">
           <ul className="divide-y divide-line">
             {NAV_ITEMS.map((item) => (
@@ -100,7 +105,10 @@ export function Header() {
               </li>
             ))}
           </ul>
-          <Link href="/login/" className="mt-6 flex h-12 w-full items-center justify-center rounded-lg bg-accent font-medium text-accent-contrast">
+          <Link href="/lottery/" className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-accent-2/30 bg-accent-2/10 font-medium text-accent-2">
+            <Icon name="gift" size={18} /> شرکت در قرعه‌کشی
+          </Link>
+          <Link href="/login/" className="mt-3 flex h-12 w-full items-center justify-center rounded-lg bg-accent font-medium text-accent-contrast">
             ورود / ثبت‌نام
           </Link>
         </nav>

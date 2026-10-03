@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Article, ArticleCategory } from "@/lib/types";
-import { articleCategories } from "@/data/articles";
+import { articleCategories } from "@/lib/categories";
 import { cn } from "@/lib/cn";
 import { EmptyState } from "@/components/ui/States";
 import { ArticleCard } from "./ArticleCard";

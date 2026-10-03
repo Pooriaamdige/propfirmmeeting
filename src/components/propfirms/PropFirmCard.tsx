@@ -3,6 +3,7 @@ import type { PropFirm } from "@/lib/types";
 import { buttonClass } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { CompareButton } from "./CompareButton";
+import { SpotlightCard } from "@/components/fx/Spotlight";
 import { FirmLogo, ReviewBadge, ReviewedAt, RuleBadge, daysLabel, feeLabel, pct, sizeLabel, splitLabel } from "./shared";
 
 function Stat({ label, labelEn, children }: { label: string; labelEn: string; children: React.ReactNode }) {
@@ -19,7 +20,7 @@ function Stat({ label, labelEn, children }: { label: string; labelEn: string; ch
 
 export function PropFirmCard({ firm }: { firm: PropFirm }) {
   return (
-    <article className="card group flex h-full flex-col p-5 transition duration-300 hover:-translate-y-0.5 hover:border-line-strong" aria-labelledby={`firm-${firm.slug}`}>
+    <SpotlightCard className="card group flex h-full flex-col rounded-2xl p-5 transition duration-300 hover:-translate-y-1" aria-labelledby={`firm-${firm.slug}`} role="article">
       <header className="flex items-start gap-3">
         <FirmLogo firm={firm} />
         <div className="min-w-0 flex-1">
@@ -88,6 +89,6 @@ export function PropFirmCard({ firm }: { firm: PropFirm }) {
           <CompareButton slug={firm.slug} name={firm.name} />
         </div>
       </div>
-    </article>
+    </SpotlightCard>
   );
 }

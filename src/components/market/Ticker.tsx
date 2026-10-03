@@ -19,7 +19,7 @@ function TickerItem({ q }: { q: Quote }) {
 }
 
 export function Ticker() {
-  const { data, envelope, error, loading, retry } = useLiveData<Quote[]>(`/api/market/quotes/?symbols=${TICKER_SYMBOLS.join(",")}`, 15_000);
+  const { data, envelope, error, loading, retry } = useLiveData<Quote[]>(`/api/market/quotes/?symbols=${TICKER_SYMBOLS.join(",")}`, 5_000);
 
   return (
     <section aria-label="نوار قیمت بازار" className="relative border-y border-line bg-surface/60">

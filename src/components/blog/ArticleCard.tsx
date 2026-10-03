@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Article } from "@/lib/types";
-import { articleCategories } from "@/data/articles";
+import { articleCategories } from "@/lib/categories";
 import { formatJalaliDate, toFaDigits } from "@/lib/format";
 import { Icon } from "@/components/ui/Icon";
 

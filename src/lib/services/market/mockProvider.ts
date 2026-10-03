@@ -76,15 +76,20 @@ export const mockProvider: MarketDataProvider = {
         low: Math.min(low, price),
         volume: isCrypto ? Math.round(20000 + hash(Math.floor(now / 3600)) * 15000) : null,
         timestamp: new Date(now * 1000).toISOString(),
+        source: "Mock (development)",
       };
     });
   },
   async getCandles(symbol, timeframe: Timeframe, limit) {
-    const step = TIMEFRAME_SECONDS[timeframe];
-    const now = Math.floor(Date.now() / 1000);
-    const last = Math.floor(now / step) * step;
-    const out: Candle[] = [];
-    for (let i = limit - 1; i >= 0; i--) out.push(candleAt(symbol, last - i * step, step, now));
-    return out;
+    return { candles: await mockCandles(symbol, timeframe, limit), source: "Mock (development)" };
   },
 };
+
+async function mockCandles(symbol: SymbolCode, timeframe: Timeframe, limit: number): Promise<Candle[]> {
+  const step = TIMEFRAME_SECONDS[timeframe];
+  const now = Math.floor(Date.now() / 1000);
+  const last = Math.floor(now / step) * step;
+  const out: Candle[] = [];
+  for (let i = limit - 1; i >= 0; i--) out.push(candleAt(symbol, last - i * step, step, now));
+  return out;
+}

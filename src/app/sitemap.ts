@@ -3,6 +3,8 @@ import { getPropFirms } from "@/lib/services/propFirmService";
 import { getArticles } from "@/lib/services/articleService";
 import { absoluteUrl } from "@/lib/site";
 
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [firms, articles] = await Promise.all([getPropFirms(), getArticles()]);
   const now = new Date();

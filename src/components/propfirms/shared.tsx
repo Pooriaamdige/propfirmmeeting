@@ -4,6 +4,11 @@ import { formatJalaliDate, formatMoney, toFaDigits } from "@/lib/format";
 import { Icon } from "@/components/ui/Icon";
 
 export function FirmLogo({ firm, size = 44 }: { firm: Pick<PropFirm, "logo" | "name">; size?: number }) {
+  if (firm.logo.src)
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- admin-provided external logo URL
+      <img src={firm.logo.src} alt="" width={size} height={size} className="shrink-0 rounded-xl border border-line-strong bg-card object-contain p-1" style={{ width: size, height: size }} />
+    );
   return (
     <span
       className="latin flex shrink-0 items-center justify-center rounded-xl border border-line-strong font-extrabold"

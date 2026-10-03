@@ -43,3 +43,23 @@ export async function verifyCaptcha(token: string | undefined, ip: string): Prom
     return false;
   }
 }
+
+/* Login brute-force protection: only failed attempts count; success clears the counter. */
+const failures = new Map<string, number[]>();
+const FAIL_WINDOW_MS = 15 * 60_000;
+const MAX_FAILURES = 8;
+
+export function tooManyFailures(key: string): boolean {
+  const now = Date.now();
+  const list = (failures.get(key) ?? []).filter((t) => now - t < FAIL_WINDOW_MS);
+  failures.set(key, list);
+  return list.length >= MAX_FAILURES;
+}
+
+export function recordFailure(key: string) {
+  failures.set(key, [...(failures.get(key) ?? []), Date.now()]);
+}
+
+export function clearFailures(key: string) {
+  failures.delete(key);
+}

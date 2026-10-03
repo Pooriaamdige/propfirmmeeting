@@ -28,6 +28,10 @@ export type ReviewStatus = "reviewed" | "in-review" | "outdated";
 
 export interface PropFirm {
   id: string;
+  /** Database id (set when loaded from the database). */
+  dbId?: number;
+  published?: boolean;
+  featured?: boolean;
   name: string;
   slug: string;
   logo: { monogram: string; color: string; src?: string };
@@ -93,6 +97,8 @@ export interface Quote {
   low: number | null;
   volume: number | null;
   timestamp: string; // ISO
+  /** Provider that produced this quote. */
+  source?: string;
 }
 
 export type Timeframe = "1m" | "5m" | "15m" | "1h" | "4h" | "1d";
@@ -153,6 +159,7 @@ export type ArticleCategory =
   | "education";
 
 export interface Article {
+  id: number;
   slug: string;
   title: string;
   excerpt: string;
@@ -161,5 +168,35 @@ export interface Article {
   updatedAt: string;
   readingMinutes: number;
   author: string;
-  sections: { heading: string; paragraphs: string[]; bullets?: string[] }[];
+  /** Lightweight Markdown: ## headings, paragraphs, "- " bullets, **bold**, [links](url). */
+  body: string;
+  published: boolean;
+}
+
+export interface Coupon {
+  id: number;
+  firm: { id: number; slug: string; name: string; logo: PropFirm["logo"]; website: string } | null;
+  title: string;
+  code: string;
+  discountLabel: string;
+  discountPercent: number | null;
+  description: string;
+  terms: string;
+  url: string | null;
+  startsAt: string | null;
+  expiresAt: string | null;
+  featured: boolean;
+  active: boolean;
+  copyCount: number;
+}
+
+export interface LotteryCampaign {
+  id: number;
+  slug: string;
+  title: string;
+  description: string;
+  prize: string;
+  startsAt: string | null;
+  endsAt: string | null;
+  active: boolean;
 }

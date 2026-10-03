@@ -8,6 +8,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["@electric-sql/pglite", "pg"],
   poweredByHeader: false,
   trailingSlash: true,
   images: { formats: ["image/avif", "image/webp"] },

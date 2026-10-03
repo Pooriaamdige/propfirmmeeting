@@ -55,7 +55,7 @@ function OverviewCard({ item }: { item: OverviewItem }) {
 }
 
 export function MarketOverview() {
-  const { data, envelope, error, loading, retry } = useLiveData<OverviewItem[]>(`/api/market/overview/?symbols=${OVERVIEW_SYMBOLS.join(",")}`, 20_000);
+  const { data, envelope, error, loading, retry } = useLiveData<OverviewItem[]>(`/api/market/overview/?symbols=${OVERVIEW_SYMBOLS.join(",")}`, 10_000);
 
   return (
     <div>

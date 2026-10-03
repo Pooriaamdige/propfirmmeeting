@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useMemo, type ReactNode } from "react";
+import { MotionConfig } from "motion/react";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 /* ----------------------------- Timezone ----------------------------- */
@@ -58,7 +59,9 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <TimezoneCtx.Provider value={{ tz, setTz }}>
-      <CompareCtx.Provider value={compare}>{children}</CompareCtx.Provider>
+      <CompareCtx.Provider value={compare}>
+        <MotionConfig reducedMotion="user">{children}</MotionConfig>
+      </CompareCtx.Provider>
     </TimezoneCtx.Provider>
   );
 }

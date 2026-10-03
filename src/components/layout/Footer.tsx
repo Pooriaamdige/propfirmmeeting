@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SITE } from "@/lib/site";
+import type { SiteSettings } from "@/lib/settings-defaults";
 import { Icon } from "@/components/ui/Icon";
 import { Logo } from "./Logo";
 
@@ -9,6 +10,8 @@ const COLUMNS = [
     links: [
       { href: "/prop-firms/", label: "پراپ‌فرم‌ها" },
       { href: "/compare/", label: "مقایسه" },
+      { href: "/coupons/", label: "کدهای تخفیف" },
+      { href: "/lottery/", label: "قرعه‌کشی" },
       { href: "/markets/", label: "بازارها" },
       { href: "/news/", label: "اخبار" },
       { href: "/economic-calendar/", label: "تقویم اقتصادی" },
@@ -32,14 +35,13 @@ const COLUMNS = [
   },
 ];
 
-const SOCIAL = [
-  { href: SITE.social.telegram, label: "Telegram", icon: "telegram" as const },
-  { href: SITE.social.instagram, label: "Instagram", icon: "instagram" as const },
-  { href: SITE.social.x, label: "X", icon: "x-logo" as const },
-  { href: SITE.social.email, label: "Email", icon: "mail" as const },
-];
-
-export function Footer() {
+export function Footer({ social }: { social: SiteSettings["social"] }) {
+  const SOCIAL = [
+    { href: social.telegram, label: "Telegram", icon: "telegram" as const },
+    { href: social.instagram, label: "Instagram", icon: "instagram" as const },
+    { href: social.x, label: "X", icon: "x-logo" as const },
+    { href: social.email, label: "Email", icon: "mail" as const },
+  ].filter((s) => s.href);
   return (
     <footer className="relative mt-8 border-t border-line bg-surface/40">
       <div className="mx-auto max-w-7xl px-4 pb-10 pt-14 sm:px-6 lg:px-8">
@@ -86,7 +88,7 @@ export function Footer() {
 
         <div className="mt-8 flex flex-col items-center justify-between gap-3 text-xs text-faint sm:flex-row">
           <p>© {new Date().getFullYear()} {SITE.name}. تمام حقوق محفوظ است.</p>
-          <p className="latin">Market data: Twelve Data · Binance · Forex Factory</p>
+          <p className="latin">Market data: Twelve Data · Yahoo Finance · Binance · Coinbase · Forex Factory</p>
         </div>
       </div>
     </footer>

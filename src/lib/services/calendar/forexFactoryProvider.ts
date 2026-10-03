@@ -1,5 +1,5 @@
 import type { Currency, EconomicEvent, Impact } from "@/lib/types";
-import { fetchJson } from "@/lib/services/errors";
+import { getJson } from "@/lib/services/http";
 import type { CalendarProvider } from "./provider";
 
 /**
@@ -16,9 +16,10 @@ interface FfEvent {
   actual?: string;
 }
 
+const BASE = (process.env.FOREX_FACTORY_FEED_BASE ?? "https://nfs.faireconomy.media").replace(/\/$/, "");
 const URLS = {
-  this: "https://nfs.faireconomy.media/ff_calendar_thisweek.json",
-  next: "https://nfs.faireconomy.media/ff_calendar_nextweek.json",
+  this: `${BASE}/ff_calendar_thisweek.json`,
+  next: `${BASE}/ff_calendar_nextweek.json`,
 };
 
 const CURRENCIES = new Set(["USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "NZD", "CNY"]);
@@ -31,7 +32,7 @@ export const forexFactoryProvider: CalendarProvider = {
   name: "Forex Factory",
   isMock: false,
   async getEvents(week) {
-    const raw = await fetchJson<FfEvent[]>(URLS[week], { headers: { "User-Agent": "Mozilla/5.0 (PropFirm Meeting calendar)" } });
+    const raw = await getJson<FfEvent[]>(URLS[week]);
     return raw
       .filter((e) => CURRENCIES.has(e.country) && e.impact !== "Non-Economic")
       .map((e, idx): EconomicEvent => {

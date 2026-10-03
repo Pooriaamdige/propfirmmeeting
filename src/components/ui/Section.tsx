@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { Reveal } from "./Reveal";
+import { ParticleField } from "@/components/fx/ParticleField";
+import { BlurText } from "@/components/fx/Motion";
 
 export function Section({ id, children, className, labelledBy }: { id?: string; children: ReactNode; className?: string; labelledBy?: string }) {
   return (
@@ -15,8 +17,8 @@ export function SectionHeader({ id, eyebrow, title, subtitle, action }: { id?: s
     <Reveal className="mb-8 flex flex-col gap-4 md:mb-10 md:flex-row md:items-end md:justify-between">
       <div className="max-w-2xl">
         {eyebrow && (
-          <p className="latin mb-3 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-accent">
-            <span className="h-px w-6 bg-accent/60" aria-hidden />
+          <p className="font-brand mb-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-accent-2">
+            <span className="h-px w-6 bg-accent-2/60" aria-hidden />
             {eyebrow}
           </p>
         )}
@@ -35,9 +37,13 @@ export function PageHeader({ eyebrow, title, subtitle, children }: { eyebrow: st
     <header className="relative overflow-hidden border-b border-line">
       <div className="grid-bg fade-mask-b pointer-events-none absolute inset-0" aria-hidden />
       <div className="ambient pointer-events-none absolute inset-0" aria-hidden />
+      <ParticleField density={0.00006} />
       <div className="relative mx-auto w-full max-w-7xl px-4 pb-10 pt-12 sm:px-6 md:pb-14 md:pt-16 lg:px-8">
-        <p className="latin mb-3 text-xs font-medium uppercase tracking-[0.18em] text-accent">{eyebrow}</p>
-        <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl">{title}</h1>
+        <p className="font-brand mb-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-accent-2">
+          <span className="h-px w-6 bg-accent-2/60" aria-hidden />
+          {eyebrow}
+        </p>
+        <BlurText as="h1" text={title} className="block text-3xl font-black tracking-tight md:text-5xl" />
         {subtitle && <p className="mt-4 max-w-2xl text-base leading-8 text-muted">{subtitle}</p>}
         {children}
       </div>

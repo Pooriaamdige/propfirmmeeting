@@ -1,9 +1,10 @@
 import "server-only";
 import { getPropFirms } from "./propFirmService";
 import { getArticles } from "./articleService";
+import { getActiveCoupons } from "./couponService";
 import { getEconomicCalendar } from "./economicCalendarService";
 import { SYMBOLS } from "@/lib/symbols";
-import { articleCategories } from "@/data/articles";
+import { articleCategories } from "@/lib/categories";
 
 export type SearchKind = "prop-firm" | "article" | "market" | "news" | "page";
 export interface SearchResult {
@@ -15,6 +16,8 @@ export interface SearchResult {
 
 const PAGES: SearchResult[] = [
   { kind: "page", title: "مقایسه پراپ‌فرم‌ها", subtitle: "Compare", href: "/compare/" },
+  { kind: "page", title: "کدهای تخفیف پراپ‌فرم‌ها", subtitle: "Coupons", href: "/coupons/" },
+  { kind: "page", title: "قرعه‌کشی", subtitle: "Giveaway", href: "/lottery/" },
   { kind: "page", title: "تقویم اقتصادی", subtitle: "Economic Calendar", href: "/economic-calendar/" },
   { kind: "page", title: "محاسبه‌گر پراپ و حجم معامله", subtitle: "Position Size Calculator", href: "/tools/#position-size" },
   { kind: "page", title: "محاسبه‌گر دراداون", subtitle: "Drawdown Calculator", href: "/tools/#drawdown" },
@@ -30,6 +33,7 @@ export async function search(query: string): Promise<SearchResult[]> {
 
   const all: SearchResult[] = [
     ...firms.map((f) => ({ kind: "prop-firm" as const, title: f.name, subtitle: `${f.program} · ${f.country ?? ""}`, href: `/prop-firms/${f.slug}/` })),
+    ...(await getActiveCoupons().catch(() => [])).map((c) => ({ kind: "page" as const, title: `کد تخفیف ${c.firm?.name ?? ""} — ${c.discountLabel}`, subtitle: c.title, href: "/coupons/" })),
     ...articles.map((a) => ({ kind: "article" as const, title: a.title, subtitle: articleCategories.find((c) => c.id === a.category)?.label ?? "", href: `/blog/${a.slug}/` })),
     ...Object.values(SYMBOLS).map((s) => ({ kind: "market" as const, title: s.code, subtitle: s.faName, href: `/markets/?symbol=${s.code}` })),
     ...PAGES,

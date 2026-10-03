@@ -34,14 +34,26 @@ function QuoteRow({ q, active, onSelect }: { q: Quote; active: boolean; onSelect
 
 export function HeroDashboard() {
   const [symbol, setSymbol] = useState<SymbolCode>("XAUUSD");
-  const quotes = useLiveData<Quote[]>(`/api/market/quotes/?symbols=${HERO_SYMBOLS.join(",")}`, 10_000);
+  const quotes = useLiveData<Quote[]>(`/api/market/quotes/?symbols=${HERO_SYMBOLS.join(",")}`, 5_000);
   const chart = useLiveData<Candle[]>(`/api/market/chart/?symbol=${symbol}&tf=15m&limit=96`, 60_000);
   const active = quotes.data?.find((q) => q.symbol === symbol);
 
   return (
     <div className="relative" style={{ animation: "float 9s ease-in-out infinite" }}>
       <div className="absolute -inset-6 rounded-[28px] bg-[radial-gradient(closest-side,var(--glow),transparent)] blur-2xl" aria-hidden />
-      <div className="card relative overflow-hidden" aria-label="داشبورد بازار">
+      {/* floating live chips */}
+      {quotes.data && (
+        <>
+          {quotes.data.slice(0, 2).map((q, i) => (
+            <div key={q.symbol} className={cn("absolute z-10 hidden items-center gap-2 rounded-xl border border-line-strong bg-card/90 px-3 py-2 text-xs shadow-card backdrop-blur md:flex", i === 0 ? "float-slow -top-4 start-1/3" : "float-slower -bottom-5 end-10")}>
+              <span className={cn("h-1.5 w-1.5 rounded-full live-dot", q.changePercent >= 0 ? "bg-pos" : "bg-neg")} aria-hidden />
+              <span className="latin font-semibold">{q.symbol}</span>
+              <Change value={q.changePercent} className="text-[11px]" />
+            </div>
+          ))}
+        </>
+      )}
+      <div className="card border-beam relative overflow-hidden rounded-2xl" aria-label="داشبورد بازار">
         {/* window chrome */}
         <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
           <div className="flex items-center gap-1.5" aria-hidden>

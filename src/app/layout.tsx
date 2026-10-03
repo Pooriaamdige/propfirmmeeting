@@ -1,12 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { themeScript } from "@/components/layout/ThemeToggle";
-import { SearchModal } from "@/components/search/SearchModal";
 import { Providers } from "@/components/Providers";
-import { CompareTray } from "@/components/propfirms/CompareTray";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SITE, absoluteUrl } from "@/lib/site";
 
@@ -16,6 +12,13 @@ const vazir = localFont({
   weight: "100 900",
   display: "swap",
   preload: true,
+});
+
+const saira = localFont({
+  src: "../../node_modules/@fontsource-variable/saira/files/saira-latin-wght-normal.woff2",
+  variable: "--font-saira",
+  weight: "100 900",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -32,8 +35,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#070B14" },
-    { media: "(prefers-color-scheme: light)", color: "#F4F5F7" },
+    { media: "(prefers-color-scheme: dark)", color: "#100C0B" },
+    { media: "(prefers-color-scheme: light)", color: "#FAF6EF" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -41,7 +44,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fa" dir="rtl" data-theme="dark" className={vazir.variable} suppressHydrationWarning>
+    <html lang="fa" dir="rtl" data-theme="dark" data-scroll-behavior="smooth" className={`${vazir.variable} ${saira.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <JsonLd
@@ -59,13 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-dvh font-sans antialiased">
-        <Providers>
-          <Header />
-          <main id="main">{children}</main>
-          <Footer />
-          <CompareTray />
-          <SearchModal />
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

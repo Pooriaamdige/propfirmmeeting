@@ -5,48 +5,51 @@
 /* separately (warmer paper surfaces, deeper accents for contrast).    */
 /* ------------------------------------------------------------------ */
 :root {
-  --bg: #070b14;
-  --surface: #0d1320;
-  --card: #111827;
-  --card-hover: #141d2e;
-  --border: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.14);
-  --text: #f8fafc;
-  --muted: #94a3b8;
-  --faint: #64748b;
-  --accent: #00d4a8;
-  --accent-contrast: #04211b;
-  --accent-2: #3b82f6;
-  --pos: #00d4a8;
-  --neg: #f43f5e;
+  /* Brand: warm black + logo orange (P) + logo gold (ropFirm) */
+  --bg: #100c0b;
+  --surface: #17120f;
+  --card: #1b1512;
+  --card-hover: #221a16;
+  --border: rgba(242, 200, 91, 0.09);
+  --border-strong: rgba(242, 200, 91, 0.18);
+  --text: #f7f1e6;
+  --muted: #b3a797;
+  --faint: #7f7468;
+  --accent: #eb7e2f;
+  --accent-contrast: #1a0e05;
+  --accent-2: #f2c85b;
+  --pos: #3fd08a;
+  --neg: #f2555a;
   --warn: #f59e0b;
-  --grid-line: rgba(148, 163, 184, 0.06);
-  --glow: rgba(0, 212, 168, 0.12);
-  --header-bg: rgba(7, 11, 20, 0.72);
-  --shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 20px 40px -24px rgba(0, 0, 0, 0.7);
+  --grid-line: rgba(242, 200, 91, 0.055);
+  --glow: rgba(235, 126, 47, 0.16);
+  --glow-2: rgba(242, 200, 91, 0.12);
+  --header-bg: rgba(16, 12, 11, 0.72);
+  --shadow: 0 1px 0 rgba(255, 240, 210, 0.03) inset, 0 20px 40px -24px rgba(0, 0, 0, 0.75);
   color-scheme: dark;
 }
 
 :root[data-theme="light"] {
-  --bg: #f4f5f7;
-  --surface: #eceef2;
+  --bg: #faf6ef;
+  --surface: #f2ebdf;
   --card: #ffffff;
-  --card-hover: #fafbfc;
-  --border: rgba(15, 23, 42, 0.09);
-  --border-strong: rgba(15, 23, 42, 0.16);
-  --text: #0b1220;
-  --muted: #4b5563;
-  --faint: #6b7280;
-  --accent: #00866b;
+  --card-hover: #fffbf5;
+  --border: rgba(70, 45, 20, 0.1);
+  --border-strong: rgba(70, 45, 20, 0.18);
+  --text: #1c1410;
+  --muted: #5f5347;
+  --faint: #86796a;
+  --accent: #c9601b;
   --accent-contrast: #ffffff;
-  --accent-2: #1d4ed8;
-  --pos: #047857;
-  --neg: #be123c;
+  --accent-2: #a2760c;
+  --pos: #11845a;
+  --neg: #c02a35;
   --warn: #b45309;
-  --grid-line: rgba(15, 23, 42, 0.05);
-  --glow: rgba(0, 134, 107, 0.08);
-  --header-bg: rgba(244, 245, 247, 0.8);
-  --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 32px -20px rgba(15, 23, 42, 0.25);
+  --grid-line: rgba(70, 45, 20, 0.055);
+  --glow: rgba(201, 96, 27, 0.1);
+  --glow-2: rgba(162, 118, 12, 0.08);
+  --header-bg: rgba(250, 246, 239, 0.82);
+  --shadow: 0 1px 2px rgba(70, 45, 20, 0.05), 0 12px 32px -20px rgba(70, 45, 20, 0.28);
   color-scheme: light;
 }
 
@@ -67,6 +70,7 @@
   --color-neg: var(--neg);
   --color-warn: var(--warn);
   --font-sans: var(--font-vazir), "Vazirmatn", system-ui, sans-serif;
+  --font-brand: var(--font-saira), "Saira", var(--font-vazir), sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, monospace;
   --shadow-card: var(--shadow);
 }
@@ -192,6 +196,176 @@
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* Animation system                                                    */
+/* ------------------------------------------------------------------ */
+@property --beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@layer components {
+  .aurora-blob {
+    filter: blur(40px);
+    animation: aurora 26s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+  .aurora-delay {
+    animation-duration: 32s;
+    animation-delay: -8s;
+  }
+  .aurora-delay-2 {
+    animation-duration: 38s;
+    animation-delay: -16s;
+  }
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Pointer-following glow + border highlight */
+  .spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.35s;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), var(--glow), transparent 45%);
+  }
+  .spotlight::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    pointer-events: none;
+    padding: 1px;
+    opacity: 0;
+    transition: opacity 0.35s;
+    background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent-2) 70%, transparent), transparent 60%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+  .spotlight:hover::before,
+  .spotlight:hover::after {
+    opacity: 1;
+  }
+
+  /* Rotating gradient border */
+  .border-beam {
+    position: relative;
+  }
+  .border-beam::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: conic-gradient(from var(--beam-angle), transparent 0deg, transparent 280deg, var(--accent) 320deg, var(--accent-2) 345deg, transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: beam 6s linear infinite;
+  }
+
+  .tilt {
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform 0.25s ease-out;
+    transform-style: preserve-3d;
+  }
+
+  .marquee-track {
+    animation: ticker linear infinite;
+  }
+
+  /* Animated gold → orange text */
+  .text-shine {
+    background: linear-gradient(110deg, var(--accent) 0%, var(--accent-2) 35%, #fff3c4 50%, var(--accent-2) 65%, var(--accent) 100%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 6s linear infinite;
+  }
+
+  /* Sheen sweep for primary buttons */
+  .btn-sheen {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-120%) skewX(-20deg);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transition: transform 0.7s ease;
+  }
+  .btn-sheen:hover::after {
+    transform: translateX(120%) skewX(-20deg);
+  }
+
+  /* Ticket edge for coupon cards */
+  .ticket {
+    --notch: 11px;
+    -webkit-mask: radial-gradient(circle var(--notch) at 0 var(--cut, 62%), transparent 98%, #000) left / 51% 100% no-repeat, radial-gradient(circle var(--notch) at 100% var(--cut, 62%), transparent 98%, #000) right / 51% 100% no-repeat;
+    mask: radial-gradient(circle var(--notch) at 0 var(--cut, 62%), transparent 98%, #000) left / 51% 100% no-repeat, radial-gradient(circle var(--notch) at 100% var(--cut, 62%), transparent 98%, #000) right / 51% 100% no-repeat;
+  }
+
+  .float-slow {
+    animation: float 7s ease-in-out infinite;
+  }
+  .float-slower {
+    animation: float 9s ease-in-out infinite;
+    animation-delay: -3s;
+  }
+}
+
+@keyframes aurora {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-6vw, 4vh, 0) scale(1.15);
+  }
+  100% {
+    transform: translate3d(4vw, -3vh, 0) scale(0.95);
+  }
+}
+@keyframes beam {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+@keyframes shine {
+  to {
+    background-position: -220% 0;
+  }
+}
+@keyframes rise {
+  from {
+    transform: scaleY(0.2);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes shimmer {
   to {
     background-position: -200% 0;
@@ -270,8 +444,15 @@
     opacity: 1;
     transform: none;
   }
-  .ticker-track {
+  .ticker-track,
+  .marquee-track,
+  .aurora-blob,
+  .border-beam::after,
+  .text-shine {
     animation: none !important;
+  }
+  .tilt {
+    transform: none !important;
   }
   .draw-line {
     stroke-dashoffset: 0;
