@@ -74,7 +74,7 @@ export default async function Dashboard({ searchParams }: PageProps<"/admin">) {
             ))}
           </Table>
           <p className="mt-3 text-xs leading-6 text-muted">
-            اگر منابع از سرور شما در دسترس نیستند (محدودیت جغرافیایی)، متغیر <code dir="ltr">OUTBOUND_PROXY_URL</code> را تنظیم کنید. برای قیمت لحظه‌ای طلا و فارکس، کلید <code dir="ltr">TWELVEDATA_API_KEY</code> توصیه می‌شود.
+            اگر منابع از سرور شما در دسترس نیستند (محدودیت جغرافیایی)، متغیر <code dir="ltr">OUTBOUND_PROXY_URL</code> را تنظیم کنید. برای قیمت لحظه‌ای و رایگان طلا و فارکس، توکن حساب دمو <code dir="ltr">OANDA_API_TOKEN</code> را اضافه کنید. خطای <code dir="ltr">429</code> یعنی سقف درخواست آن منبع پر شده است.
           </p>
         </Panel>
 

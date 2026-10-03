@@ -32,7 +32,14 @@ export const forexFactoryProvider: CalendarProvider = {
   name: "Forex Factory",
   isMock: false,
   async getEvents(week) {
-    const raw = await getJson<FfEvent[]>(URLS[week]);
+    let raw: FfEvent[];
+    try {
+      raw = await getJson<FfEvent[]>(URLS[week]);
+    } catch (err) {
+      // The next-week file is only published late in the week; until then it 404s.
+      if (week === "next" && /HTTP 404/.test(String((err as Error).message))) return [];
+      throw err;
+    }
     return raw
       .filter((e) => CURRENCIES.has(e.country) && e.impact !== "Non-Economic")
       .map((e, idx): EconomicEvent => {

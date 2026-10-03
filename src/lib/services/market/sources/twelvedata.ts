@@ -19,11 +19,27 @@ interface TdQuote {
   message?: string;
 }
 
+/**
+ * Credit budget. Twelve Data charges 1 credit per symbol per request and returns
+ * HTTP 429 when the per-minute allowance is exceeded (free plan: 8/min, 800/day).
+ * We refuse calls that would exceed TWELVEDATA_CREDITS_PER_MINUTE so the next provider
+ * (or the last cached value) is used instead of burning into 429s.
+ */
+const spent: number[] = [];
+function takeCredits(n: number) {
+  const limit = Number(process.env.TWELVEDATA_CREDITS_PER_MINUTE ?? 8);
+  const now = Date.now();
+  while (spent.length && now - spent[0] > 60_000) spent.shift();
+  if (spent.length + n > limit) throw new Error(`Twelve Data credit budget (${limit}/min) reached`);
+  for (let i = 0; i < n; i++) spent.push(now);
+}
+
 export const twelveData: MarketSource = {
   name: "Twelve Data",
   supports: (s) => !!SYMBOLS[s].twelveData && !!process.env.TWELVEDATA_API_KEY,
   async getQuotes(symbols) {
     const td = symbols.map((s) => SYMBOLS[s].twelveData!);
+    takeCredits(td.length);
     const json = await getJson<TdQuote | Record<string, TdQuote> & { status?: string; message?: string }>(`${BASE}/quote?symbol=${encodeURIComponent(td.join(","))}&apikey=${process.env.TWELVEDATA_API_KEY}`);
     if ((json as TdQuote).status === "error") throw new Error((json as TdQuote).message ?? "Twelve Data error");
     const by: Record<string, TdQuote> = symbols.length === 1 ? { [td[0]]: json as TdQuote } : (json as Record<string, TdQuote>);
@@ -35,6 +51,7 @@ export const twelveData: MarketSource = {
     });
   },
   async getCandles(symbol: SymbolCode, tf: Timeframe, limit: number): Promise<Candle[]> {
+    takeCredits(1);
     const json = await getJson<{ status: string; message?: string; values?: { datetime: string; open: string; high: string; low: string; close: string }[] }>(
       `${BASE}/time_series?symbol=${encodeURIComponent(SYMBOLS[symbol].twelveData!)}&interval=${INTERVAL[tf]}&outputsize=${limit}&timezone=UTC&apikey=${process.env.TWELVEDATA_API_KEY}`,
     );

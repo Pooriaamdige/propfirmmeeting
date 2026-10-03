@@ -99,6 +99,8 @@ export interface Quote {
   timestamp: string; // ISO
   /** Provider that produced this quote. */
   source?: string;
+  /** When our server fetched it (may be older than now when serving a cached fallback). */
+  fetchedAt?: string;
 }
 
 export type Timeframe = "1m" | "5m" | "15m" | "1h" | "4h" | "1d";

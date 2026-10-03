@@ -63,15 +63,22 @@ The browser only calls our own `/api/*` endpoints. The server fetches from provi
 
 | Asset | Default chain (`MARKET_FX_PROVIDERS` / `MARKET_CRYPTO_PROVIDERS`) | Notes |
 | --- | --- | --- |
-| Forex, XAUUSD, DXY | `twelvedata,yahoo` | Twelve Data (key) gives spot prices. The Yahoo fallback is keyless; it serves gold as COMEX futures (GC=F) and labels the source so on the page |
+| Forex, XAUUSD, DXY | `oanda,twelvedata,yahoo` | **OANDA** gives free real-time spot prices with a demo account token (`OANDA_API_TOKEN`). DXY is calculated from its six components with the ICE formula and labelled as such. Twelve Data is metered (`TWELVEDATA_CREDITS_PER_MINUTE`; calls past the budget are skipped). Yahoo is a keyless fallback that serves gold as COMEX futures and often rate-limits proxy/datacenter IPs |
 | BTC, ETH | `binance,coinbase,yahoo` | All keyless |
-| Calendar / news | Forex Factory weekly feed | Cached 30 min |
+| Calendar / news | Forex Factory weekly feed | Cached 30 min. The next-week file is only published late in the week |
 
-- Every widget shows its source and the last update time. If every provider fails, the UI shows «اطلاعات لحظه‌ای موقتاً در دسترس نیست» with a retry button and never fake prices.
+- Forex refreshes every `MARKET_FX_QUOTE_TTL_SECONDS` (default 10 s with OANDA, 60 s without) and crypto every `MARKET_CRYPTO_QUOTE_TTL_SECONDS` (default 5 s). One upstream request per interval serves every visitor.
+- If a refresh fails, the last good data is shown for up to 15 minutes **with its original timestamp**. After that the UI shows «اطلاعات لحظه‌ای موقتاً در دسترس نیست» with a retry button. Fake prices are never shown.
 - A failing provider is paused for a while (circuit breaker).
 - **Admin → Dashboard → «وضعیت داده‌های زنده»** shows each provider's last success and last error. Check it first if prices don't load.
-- **Servers in Iran:** Binance, Coinbase, Yahoo, Twelve Data and Forex Factory may block Iranian IPs. Set `OUTBOUND_PROXY_URL` to a proxy outside the restricted region (`http://user:pass@host:port` or `socks5://user:pass@host:port`, e.g. a local v2ray/xray client); all provider requests go through it.
-- The Twelve Data free tier (8 requests/min) is too small for 5-second polling of many symbols. Use a paid plan, or raise `MARKET_QUOTE_TTL_SECONDS`.
+- **Servers in Iran:** most providers block Iranian IPs. Set `OUTBOUND_PROXY_URL` to a proxy outside Iran (`socks5://host:port` or `http://user:pass@host:port`, e.g. a local v2ray/xray client); all provider requests go through it.
+
+### Setting up OANDA (free, recommended for forex and gold)
+
+1. Create a free **demo (practice)** account at oanda.com.
+2. In the account area, open **Manage API Access** and generate a token.
+3. Optionally copy your account ID (format `101-xxx-xxxxxxx-xxx`) from the account page.
+4. Add `OANDA_API_TOKEN=...` (and `OANDA_ACCOUNT_ID=...`) to `.env.local`, rebuild and restart.
 
 ## Site structure
 
