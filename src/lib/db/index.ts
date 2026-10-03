@@ -26,7 +26,7 @@ export function db(): Promise<DB> {
 }
 
 async function connect(): Promise<DB> {
-  const migrationsFolder = path.join(process.cwd(), "drizzle");
+  const migrationsFolder = path.join(/*turbopackIgnore: true*/ process.cwd(), "drizzle");
   let database: DB;
 
   if (process.env.DATABASE_URL) {
@@ -35,7 +35,7 @@ async function connect(): Promise<DB> {
     await migrate(database, { migrationsFolder });
   } else {
     const [{ drizzle }, { migrate }, { PGlite }] = await Promise.all([import("drizzle-orm/pglite"), import("drizzle-orm/pglite/migrator"), import("@electric-sql/pglite")]);
-    const dir = path.resolve(process.env.PGLITE_DIR ?? path.join(process.cwd(), ".data", "pglite"));
+    const dir = path.resolve(/*turbopackIgnore: true*/ process.env.PGLITE_DIR ?? path.join(process.cwd(), ".data", "pglite"));
     mkdirSync(dir, { recursive: true });
     const pg = drizzle(new PGlite(dir), { schema });
     await migrate(pg, { migrationsFolder });
