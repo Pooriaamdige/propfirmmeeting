@@ -93,7 +93,24 @@ The browser only calls our own `/api/*` endpoints. The server fetches from provi
 | `/tools/` | Position size and drawdown calculators |
 | `/blog/` | Articles |
 | `/lottery/` | Active lottery campaign + registration form |
+| `/journal/` | **Trading journal** for registered users (see below) |
+| `/login/`, `/register/`, `/account/` | Site user accounts (separate from admins) |
 | `/admin/` | Admin panel |
+
+## Trading journal (`/journal`)
+
+A Myfxbook-style journal. Trades are entered **manually** (or imported from CSV); there is no MT4/MT5 connection yet. Each user only ever sees their own data.
+
+- **Accounts**: prop challenge / funded / personal / demo. Choosing a prop firm fills in its rules (daily loss, max loss static or trailing, profit target, minimum trading days, consistency rule) and the daily reset timezone.
+- **Trade entry**: symbol, side, open/close time, lots, entry/SL/TP/exit, commission, swap. Pips, P/L (USD-quoted pairs, USD-base pairs, gold, silver, crypto), risk and R-multiple are calculated live; the user can override them. Setup, tags, mistakes, emotion, 1–5 execution rating, notes and a chart link. Open trades are supported.
+- **Deposits/withdrawals** so growth is time-weighted (deposits don't count as gain).
+- **Overview**: balance, time-weighted gain and absolute gain, max drawdown (% and $), win rate, profit factor, expectancy, payoff ratio, average R, Sharpe, AHPR/GHPR, Z-score, Kelly %, recovery factor, streaks, average hold times; growth/balance/drawdown curves; P/L calendar heatmap; monthly returns; automatic insights.
+- **Analysis**: breakdowns by symbol, side, setup, tag, mistake (cost of each mistake), emotion, rating, session (Asia/London/overlap/New York), weekday, hour of day, holding time and R distribution.
+- **Prop rules**: live status of every rule with progress bars, trailing-drawdown floor, best-day share for consistency rules.
+- **Filters** by date range, symbol, side and setup on every tab.
+- **CSV import/export**: columns `symbol, side, open_time, close_time, lots, entry_price, exit_price, stop_loss, take_profit, profit, commission, swap, setup, tags, notes`. MT4/MT5 history exports (Excel → CSV) are recognised, broker suffixes such as `EURUSD.m` are stripped, balance rows are skipped. Download a template from the import page. There is a dry run before importing.
+
+The admin dashboard shows the number of journal users and recorded trades. Analytics live in `src/lib/journal/analytics.ts` (pure functions, covered by `npm test`).
 
 ## Admin panel (`/admin`)
 
@@ -135,5 +152,6 @@ The seeded prop firm data is marked «در حال بررسی». Verify each firm
 | --- | --- |
 | `npm run dev` / `build` / `start` | Next.js |
 | `npm run lint` / `typecheck` | ESLint / TypeScript |
+| `npm test` | Unit tests (journal analytics, CSV parsing) |
 | `npm run admin:create -- email "password" [admin\|editor]` | Create or reset an admin |
 | `npm run db:generate` | Generate a migration after editing `src/lib/db/schema.ts` |

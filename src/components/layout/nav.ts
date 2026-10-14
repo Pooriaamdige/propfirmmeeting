@@ -6,6 +6,7 @@ export const NAV_ITEMS = [
   { href: "/markets/", label: "بازارها" },
   { href: "/news/", label: "اخبار" },
   { href: "/economic-calendar/", label: "تقویم اقتصادی" },
+  { href: "/journal/", label: "ژورنال" },
   { href: "/tools/", label: "ابزارها" },
   { href: "/blog/", label: "آموزش" },
 ] as const;

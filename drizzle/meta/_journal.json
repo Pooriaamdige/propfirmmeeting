@@ -15,6 +15,13 @@
       "when": 1791024003442,
       "tag": "0001_content_admin",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791998525632,
+      "tag": "0002_users_journal",
+      "breakpoints": true
     }
   ]
 }

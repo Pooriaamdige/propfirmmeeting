@@ -19,13 +19,15 @@ async function probe() {
 export default async function Dashboard({ searchParams }: PageProps<"/admin">) {
   const sp = await searchParams;
   const d = await db();
-  const [[firms], [coupons], [copies], [articles], [subs], [regs], recent, active, status] = await Promise.all([
+  const [[firms], [coupons], [copies], [articles], [subs], [regs], [members], [trades], recent, active, status] = await Promise.all([
     d.select({ n: count() }).from(schema.propFirms),
     d.select({ n: count() }).from(schema.coupons).where(eq(schema.coupons.active, true)),
     d.select({ n: sum(schema.coupons.copyCount) }).from(schema.coupons),
     d.select({ n: count() }).from(schema.articles),
     d.select({ n: count() }).from(schema.newsletterSubscribers),
     d.select({ n: count() }).from(schema.lotteryRegistrations),
+    d.select({ n: count() }).from(schema.users),
+    d.select({ n: count() }).from(schema.journalTrades),
     d.select().from(schema.lotteryRegistrations).orderBy(desc(schema.lotteryRegistrations.createdAt)).limit(6),
     d.select().from(schema.lotteryCampaigns).where(eq(schema.lotteryCampaigns.active, true)).limit(1),
     probe(),
@@ -43,6 +45,8 @@ export default async function Dashboard({ searchParams }: PageProps<"/admin">) {
         <StatCard label="مقالات" value={articles.n} icon="book" href="/admin/articles/" tone="gold" />
         <StatCard label="ثبت‌نام قرعه‌کشی" value={regs.n} icon="gift" href="/admin/lottery/" />
         <StatCard label="اعضای خبرنامه" value={subs.n} icon="mail" href="/admin/newsletter/" tone="gold" />
+        <StatCard label="کاربران ژورنال" value={members.n} icon="user" />
+        <StatCard label="معاملات ثبت‌شده در ژورنال" value={trades.n} icon="activity" tone="gold" />
       </div>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-2">

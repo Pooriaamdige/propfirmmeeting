@@ -11,7 +11,7 @@ import { NAV_ITEMS } from "./nav";
 import { ThemeToggle } from "./ThemeToggle";
 import { openSearch } from "@/components/search/SearchModal";
 
-export function Header() {
+export function Header({ user }: { user: { name: string; email: string } | null }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -83,9 +83,16 @@ export function Header() {
             <span className="hidden 2xl:inline">قرعه‌کشی</span>
           </Link>
           <ThemeToggle />
-          <Link href="/login/" className="hidden h-9 items-center whitespace-nowrap rounded-lg bg-fg px-3.5 text-sm font-medium text-bg transition hover:opacity-90 sm:inline-flex">
-            ورود / ثبت‌نام
-          </Link>
+          {user ? (
+            <Link href="/journal/" className="hidden h-9 items-center gap-2 whitespace-nowrap rounded-lg bg-fg px-3 text-sm font-medium text-bg transition hover:opacity-90 sm:inline-flex">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent text-[11px] font-bold text-accent-contrast">{(user.name || user.email).slice(0, 1).toUpperCase()}</span>
+              ژورنال من
+            </Link>
+          ) : (
+            <Link href="/login/" className="hidden h-9 items-center whitespace-nowrap rounded-lg bg-fg px-3.5 text-sm font-medium text-bg transition hover:opacity-90 sm:inline-flex">
+              ورود / ثبت‌نام
+            </Link>
+          )}
           <button onClick={() => setOpen((v) => !v)} className="flex h-9 w-9 items-center justify-center rounded-lg text-fg hover:bg-card xl:hidden" aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? "بستن منو" : "باز کردن منو"}>
             <Icon name={open ? "x" : "menu"} size={20} />
           </button>
@@ -108,8 +115,8 @@ export function Header() {
           <Link href="/lottery/" className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-accent-2/30 bg-accent-2/10 font-medium text-accent-2">
             <Icon name="gift" size={18} /> شرکت در قرعه‌کشی
           </Link>
-          <Link href="/login/" className="mt-3 flex h-12 w-full items-center justify-center rounded-lg bg-accent font-medium text-accent-contrast">
-            ورود / ثبت‌نام
+          <Link href={user ? "/journal/" : "/login/"} className="mt-3 flex h-12 w-full items-center justify-center rounded-lg bg-accent font-medium text-accent-contrast">
+            {user ? "ژورنال من" : "ورود / ثبت‌نام"}
           </Link>
         </nav>
       </div>

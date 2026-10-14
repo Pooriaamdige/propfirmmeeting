@@ -1,4 +1,4 @@
-import { boolean, integer, jsonb, pgTable, serial, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
+import { boolean, date, doublePrecision, index, integer, jsonb, pgTable, serial, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
 import type { PropFirm } from "@/lib/types";
 
 const ts = (name: string) => timestamp(name, { withTimezone: true });
@@ -113,3 +113,120 @@ export const adminSessions = pgTable("admin_sessions", {
   expiresAt: ts("expires_at").notNull(),
   createdAt: ts("created_at").defaultNow().notNull(),
 });
+
+/* ------------------------------ Site users ------------------------------ */
+
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  email: varchar("email", { length: 254 }).notNull().unique(),
+  name: varchar("name", { length: 120 }).default("").notNull(),
+  passwordHash: text("password_hash").notNull(),
+  disabled: boolean("disabled").default(false).notNull(),
+  createdAt: ts("created_at").defaultNow().notNull(),
+  lastLoginAt: ts("last_login_at"),
+});
+
+export const userSessions = pgTable("user_sessions", {
+  id: varchar("id", { length: 64 }).primaryKey(), // sha256(token)
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  expiresAt: ts("expires_at").notNull(),
+  createdAt: ts("created_at").defaultNow().notNull(),
+});
+
+/* -------------------------------- Journal -------------------------------- */
+
+export interface JournalRules {
+  dailyDrawdownPct: number | null;
+  maxDrawdownPct: number | null;
+  maxDrawdownType: "static" | "trailing";
+  profitTargetPct: number | null;
+  minTradingDays: number | null;
+  /** Max share (%) of total profit allowed from the single best day. */
+  consistencyPct: number | null;
+}
+
+export const journalAccounts = pgTable(
+  "journal_accounts",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    name: varchar("name", { length: 120 }).notNull(),
+    type: varchar("type", { length: 20 }).default("challenge").notNull(), // challenge | funded | personal | demo
+    firmId: integer("firm_id").references(() => propFirms.id, { onDelete: "set null" }),
+    firmName: varchar("firm_name", { length: 120 }).default("").notNull(),
+    broker: varchar("broker", { length: 120 }).default("").notNull(),
+    platform: varchar("platform", { length: 40 }).default("").notNull(),
+    currency: varchar("currency", { length: 3 }).default("USD").notNull(),
+    initialBalance: doublePrecision("initial_balance").notNull(),
+    startedAt: date("started_at").notNull(),
+    rules: jsonb("rules").$type<JournalRules>(),
+    archived: boolean("archived").default(false).notNull(),
+    createdAt: ts("created_at").defaultNow().notNull(),
+    updatedAt: ts("updated_at").defaultNow().notNull(),
+  },
+  (t) => [index("journal_accounts_user_idx").on(t.userId)],
+);
+
+export const journalTrades = pgTable(
+  "journal_trades",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    accountId: integer("account_id")
+      .notNull()
+      .references(() => journalAccounts.id, { onDelete: "cascade" }),
+    symbol: varchar("symbol", { length: 20 }).notNull(),
+    side: varchar("side", { length: 4 }).notNull(), // buy | sell
+    openedAt: ts("opened_at").notNull(),
+    closedAt: ts("closed_at"), // null = still open
+    entryPrice: doublePrecision("entry_price").notNull(),
+    exitPrice: doublePrecision("exit_price"),
+    lots: doublePrecision("lots").notNull(),
+    stopLoss: doublePrecision("stop_loss"),
+    takeProfit: doublePrecision("take_profit"),
+    /** Gross P/L in account currency as shown by the platform (before commission/swap). */
+    profit: doublePrecision("profit"),
+    /** Commission as a positive cost. */
+    commission: doublePrecision("commission").default(0).notNull(),
+    /** Swap, signed (credit positive). */
+    swap: doublePrecision("swap").default(0).notNull(),
+    pips: doublePrecision("pips"),
+    /** Money at risk at entry (from stop loss). Enables R-multiples. */
+    riskAmount: doublePrecision("risk_amount"),
+    setup: varchar("setup", { length: 80 }).default("").notNull(),
+    tags: jsonb("tags").$type<string[]>().default([]).notNull(),
+    mistakes: jsonb("mistakes").$type<string[]>().default([]).notNull(),
+    emotion: varchar("emotion", { length: 20 }).default("").notNull(),
+    rating: integer("rating"),
+    notes: text("notes").default("").notNull(),
+    screenshotUrl: text("screenshot_url"),
+    createdAt: ts("created_at").defaultNow().notNull(),
+    updatedAt: ts("updated_at").defaultNow().notNull(),
+  },
+  (t) => [index("journal_trades_account_idx").on(t.accountId, t.openedAt), index("journal_trades_user_idx").on(t.userId)],
+);
+
+export const journalTransactions = pgTable(
+  "journal_transactions",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    accountId: integer("account_id")
+      .notNull()
+      .references(() => journalAccounts.id, { onDelete: "cascade" }),
+    type: varchar("type", { length: 12 }).notNull(), // deposit | withdrawal
+    amount: doublePrecision("amount").notNull(),
+    at: ts("at").notNull(),
+    note: text("note").default("").notNull(),
+    createdAt: ts("created_at").defaultNow().notNull(),
+  },
+  (t) => [index("journal_tx_account_idx").on(t.accountId)],
+);

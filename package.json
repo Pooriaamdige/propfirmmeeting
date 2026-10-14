@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "admin:create": "node --env-file-if-exists=.env.local scripts/create-admin.mjs"
+    "admin:create": "node --env-file-if-exists=.env.local scripts/create-admin.mjs",
+    "test": "node --experimental-strip-types --no-warnings --test tests/*.test.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.8",
