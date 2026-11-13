@@ -21,11 +21,26 @@ import { PropFirmCard } from "@/components/propfirms/PropFirmCard";
 import { CouponCard } from "@/components/coupons/CouponCard";
 import { ArticleCard } from "@/components/blog/ArticleCard";
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
+import { WidgetBoundary } from "@/components/ui/WidgetBoundary";
+import { DEFAULT_SETTINGS } from "@/lib/settings-defaults";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [firms, featured, articles, coupons, settings, campaign] = await Promise.all([getPropFirms(), getFeaturedPropFirms(3), getArticles(), getActiveCoupons(), getSettings(), getActiveCampaign().catch(() => null)]);
+  // Secondary content degrades to empty instead of failing the whole homepage.
+  const soft = <T,>(p: Promise<T>, fallback: T, what: string) =>
+    p.catch((err) => {
+      console.error(`[home] ${what}:`, err);
+      return fallback;
+    });
+  const [firms, featured, articles, coupons, settings, campaign] = await Promise.all([
+    soft(getPropFirms(), [], "prop firms"),
+    soft(getFeaturedPropFirms(3), [], "featured firms"),
+    soft(getArticles(), [], "articles"),
+    soft(getActiveCoupons(), [], "coupons"),
+    soft(getSettings(), DEFAULT_SETTINGS, "settings"),
+    soft(getActiveCampaign(), null, "campaign"),
+  ]);
 
   return (
     <>
@@ -75,15 +90,15 @@ export default async function HomePage() {
             </Reveal>
           </div>
           <Reveal delay={200}>
-            <HeroDashboard />
+            <WidgetBoundary name="hero-dashboard"><HeroDashboard /></WidgetBoundary>
           </Reveal>
         </div>
         <div className="relative pb-10">
-          <FirmMarquee firms={firms} />
+          <WidgetBoundary name="firm-marquee" fallback={null}><FirmMarquee firms={firms} /></WidgetBoundary>
         </div>
       </section>
 
-      <Ticker />
+      <WidgetBoundary name="ticker" fallback={null}><Ticker /></WidgetBoundary>
 
       {/* What you get */}
       <Section id="features" labelledBy="features-title">
@@ -133,14 +148,14 @@ export default async function HomePage() {
       {/* Markets */}
       <Section id="markets" labelledBy="markets-title" className="border-t border-line">
         <SectionHeader id="markets-title" eyebrow="Live Markets" title="امروز در بازار" subtitle="قیمت لحظه‌ای مهم‌ترین نمادها؛ نمودار کامل و ساعت سشن‌ها در صفحه بازارها." action={<LinkButton href="/markets/" variant="secondary" size="sm">نمودار و بازارها <Icon name="arrow-left" size={15} /></LinkButton>} />
-        <MarketOverview />
+        <WidgetBoundary name="market-overview"><MarketOverview /></WidgetBoundary>
       </Section>
 
       {/* News */}
       <Section id="news" labelledBy="news-title" className="border-t border-line">
         <SectionHeader id="news-title" eyebrow="Forex Factory" title="اخبار مهم پیش رو" subtitle="رویدادهای پراهمیت به وقت تهران؛ برای رعایت قوانین خبری پراپ‌فرم‌ها." action={<LinkButton href="/economic-calendar/" variant="secondary" size="sm">تقویم اقتصادی <Icon name="arrow-left" size={15} /></LinkButton>} />
         <Reveal>
-          <NewsFeed limit={5} showMoreLink />
+          <WidgetBoundary name="news-feed"><NewsFeed limit={5} showMoreLink /></WidgetBoundary>
         </Reveal>
       </Section>
 

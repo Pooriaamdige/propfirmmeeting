@@ -458,3 +458,8 @@
     stroke-dashoffset: 0;
   }
 }
+
+/* Logo wordmark: the source gold is tuned for dark backgrounds */
+:root[data-theme="light"] .logo-wordmark {
+  filter: brightness(0.62) saturate(1.5);
+}
