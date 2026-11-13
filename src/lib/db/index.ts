@@ -7,6 +7,8 @@ import * as schema from "./schema";
 export type DB = NodePgDatabase<typeof schema>;
 
 let ready: Promise<DB> | null = null;
+// One PGlite instance per process: opening the same data folder twice corrupts it.
+let pglite: unknown = null;
 
 /**
  * Database connection, migrated and seeded on first use.
@@ -18,6 +20,7 @@ let ready: Promise<DB> | null = null;
 export function db(): Promise<DB> {
   if (!ready) {
     ready = connect().catch((err) => {
+      console.error("[db] connection/migration failed:", err);
       ready = null; // retry on next call
       throw err;
     });
@@ -37,13 +40,19 @@ async function connect(): Promise<DB> {
     const [{ drizzle }, { migrate }, { PGlite }] = await Promise.all([import("drizzle-orm/pglite"), import("drizzle-orm/pglite/migrator"), import("@electric-sql/pglite")]);
     const dir = path.resolve(/*turbopackIgnore: true*/ process.env.PGLITE_DIR ?? path.join(process.cwd(), ".data", "pglite"));
     mkdirSync(dir, { recursive: true });
-    const pg = drizzle(new PGlite(dir), { schema });
+    pglite ??= new PGlite(dir);
+    const pg = drizzle(pglite as InstanceType<typeof PGlite>, { schema });
     await migrate(pg, { migrationsFolder });
     database = pg as unknown as DB;
   }
 
-  const { seed } = await import("./seed");
-  await seed(database);
+  // Seeding only fills empty tables; a failure there must not take the site down.
+  try {
+    const { seed } = await import("./seed");
+    await seed(database);
+  } catch (err) {
+    console.error("[db] seed failed (site continues):", err);
+  }
   return database;
 }
 

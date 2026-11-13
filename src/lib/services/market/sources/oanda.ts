@@ -56,8 +56,25 @@ async function candles(inst: string, gran: string, count: number): Promise<OCand
   return json.candles ?? [];
 }
 
+// Index CFDs (NAS100) aren't offered on every OANDA account (e.g. OANDA US), so they are fetched
+// on their own and a failure only drops that symbol instead of every forex quote.
+const OPTIONAL = new Set(["NAS100_USD"]);
+
 /** Current mid price per instrument. */
 async function prices(insts: string[]): Promise<Record<string, { mid: number; time: number }>> {
+  const core = insts.filter((i) => !OPTIONAL.has(i));
+  const extra = insts.filter((i) => OPTIONAL.has(i));
+  const [main, ...rest] = await Promise.allSettled([core.length ? rawPrices(core) : Promise.resolve({}), ...extra.map((i) => rawPrices([i]))]);
+  if (main.status === "rejected") throw main.reason;
+  const out = { ...main.value };
+  rest.forEach((r, k) => {
+    if (r.status === "fulfilled") Object.assign(out, r.value);
+    else console.warn(`[market] OANDA ${extra[k]} unavailable:`, String((r.reason as Error)?.message ?? r.reason));
+  });
+  return out;
+}
+
+async function rawPrices(insts: string[]): Promise<Record<string, { mid: number; time: number }>> {
   const out: Record<string, { mid: number; time: number }> = {};
   const account = process.env.OANDA_ACCOUNT_ID;
   if (account) {
@@ -101,7 +118,7 @@ export const oanda: MarketSource = {
     for (const symbol of symbols) {
       const inst = INSTRUMENT[symbol];
       if (!inst || !px[inst]) continue;
-      const d = await daily(inst);
+      const d = await daily(inst).catch(() => ({ high: null, low: null, prevClose: null }));
       const price = px[inst].mid;
       const prev = d.prevClose ?? price;
       quotes.push({

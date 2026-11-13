@@ -32,6 +32,19 @@ function QuoteRow({ q, active, onSelect }: { q: Quote; active: boolean; onSelect
   );
 }
 
+/** Symbol the providers didn't return: keep its place in the list, but say it's unavailable. */
+function MissingRow({ symbol, active, onSelect }: { symbol: SymbolCode; active: boolean; onSelect: () => void }) {
+  return (
+    <button onClick={onSelect} aria-pressed={active} className={cn("flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-start opacity-70 transition", active ? "bg-surface ring-1 ring-line-strong" : "hover:bg-surface/60")}>
+      <span>
+        <span className="latin block text-[13px] font-semibold">{symbol}</span>
+        <span className="block text-[11px] text-muted">{SYMBOLS[symbol].faName}</span>
+      </span>
+      <span className="text-end text-[11px] text-faint">در دسترس نیست</span>
+    </button>
+  );
+}
+
 export function HeroDashboard() {
   const [symbol, setSymbol] = useState<SymbolCode>("XAUUSD");
   const quotes = useLiveData<Quote[]>(`/api/market/quotes/?symbols=${HERO_SYMBOLS.join(",")}`, 5_000);
@@ -92,7 +105,10 @@ export function HeroDashboard() {
           {/* watchlist */}
           <div className="space-y-1 p-2">
             {quotes.data
-              ? quotes.data.map((q) => <QuoteRow key={q.symbol} q={q} active={q.symbol === symbol} onSelect={() => setSymbol(q.symbol)} />)
+              ? HERO_SYMBOLS.map((s) => {
+                  const q = quotes.data!.find((x) => x.symbol === s);
+                  return q ? <QuoteRow key={s} q={q} active={s === symbol} onSelect={() => setSymbol(s)} /> : <MissingRow key={s} symbol={s} active={s === symbol} onSelect={() => setSymbol(s)} />;
+                })
               : quotes.error
                 ? <ErrorState compact message={quotes.error} onRetry={quotes.retry} />
                 : HERO_SYMBOLS.map((s) => <Skeleton key={s} className="h-[52px] w-full" />)}
