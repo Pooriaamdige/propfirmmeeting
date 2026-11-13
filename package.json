@@ -11,6 +11,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "admin:create": "node --env-file-if-exists=.env.local scripts/create-admin.mjs",
+    "db:export": "node --env-file-if-exists=.env.local scripts/db-export.mjs",
+    "db:import": "node --env-file-if-exists=.env.local scripts/db-import.mjs",
     "test": "node --experimental-strip-types --no-warnings --test tests/*.test.ts"
   },
   "dependencies": {

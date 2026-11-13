@@ -38,6 +38,21 @@ OUTBOUND_PROXY_URL=...          # if the server is in a region the data provider
 - **First admin.** Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` before the first start, or run `npm run admin:create -- you@example.com "password"`. Add more admins or editors in **/admin/users**.
 - **HTTPS.** Admin cookies are `Secure` in production. If the site is served over plain `http`, set `COOKIE_SECURE=false`; otherwise login silently fails.
 
+### Database backup and recovery
+
+The embedded database (PGlite) can be damaged if the process is killed while writing, or if two processes open it. The log then shows `RuntimeError: Aborted()` on every query.
+
+```bash
+pm2 stop propfirm
+npm run db:export                       # saves every readable table to backups/db-<time>/
+mv .data/pglite .data/pglite-damaged
+pm2 start propfirm && sleep 15 && pm2 stop propfirm   # creates a fresh, migrated database
+npm run db:import -- backups/db-<time>  # puts your data back
+pm2 start propfirm
+```
+
+The same two commands move the data to PostgreSQL: export, set `DATABASE_URL`, start and stop the app once, then import. Run `npm run db:export` regularly (e.g. daily cron) as a backup.
+
 ### nginx
 
 ```nginx

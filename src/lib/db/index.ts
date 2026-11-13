@@ -21,6 +21,9 @@ export function db(): Promise<DB> {
   if (!ready) {
     ready = connect().catch((err) => {
       console.error("[db] connection/migration failed:", err);
+      if (!process.env.DATABASE_URL && /Aborted/.test(String((err as Error)?.cause ?? err))) {
+        console.error("[db] The PGlite data folder looks damaged. Stop the app, save it with `npm run db:export`, move the folder aside, start the app (fresh database), stop it, then `npm run db:import -- <backup-dir>`. See README → Database recovery.");
+      }
       ready = null; // retry on next call
       throw err;
     });
