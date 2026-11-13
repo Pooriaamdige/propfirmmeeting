@@ -10,7 +10,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { LinkButton } from "@/components/ui/Button";
 import { JsonLd, breadcrumbLd } from "@/components/seo/JsonLd";
 import { CompareButton } from "@/components/propfirms/CompareButton";
-import { FirmLogo, ReviewBadge, RuleBadge, daysLabel, pct, sizeLabel, splitLabel } from "@/components/propfirms/shared";
+import { FirmLogo, ReviewBadge, RuleBadge, TargetSplit, daysLabel, pct, sizeLabel, splitLabel } from "@/components/propfirms/shared";
 
 export const dynamic = "force-dynamic";
 
@@ -26,14 +26,14 @@ export async function generateMetadata({ params }: PageProps<"/prop-firms/[slug]
   };
 }
 
-function QuickCard({ label, labelEn, value, sub }: { label: string; labelEn: string; value: string; sub?: React.ReactNode }) {
+function QuickCard({ label, labelEn, value, sub }: { label: string; labelEn: string; value: React.ReactNode; sub?: React.ReactNode }) {
   return (
     <div className="card p-4">
       <p className="flex items-baseline justify-between gap-2 text-xs text-muted">
         {label}
         <span className="latin text-[10px] text-faint">{labelEn}</span>
       </p>
-      <p className="num mt-2 text-xl font-bold">{value}</p>
+      <div className={`mt-2 text-xl font-bold ${typeof value === "string" ? "num" : ""}`}>{value}</div>
       {sub && <p className="mt-1 text-[11px] leading-5 text-faint">{sub}</p>}
     </div>
   );
@@ -93,9 +93,6 @@ export default async function PropFirmPage({ params }: PageProps<"/prop-firms/[s
             mainEntityOfPage: url,
             about: { "@type": "Organization", name: firm.name, url: firm.website },
           },
-          ...(firm.faq.length
-            ? [{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: firm.faq.map((q) => ({ "@type": "Question", name: q.question, acceptedAnswer: { "@type": "Answer", text: q.answer } })) }]
-            : []),
         ]}
       />
 
@@ -148,7 +145,7 @@ export default async function PropFirmPage({ params }: PageProps<"/prop-firms/[s
           <h2 id="facts" className="mb-5 text-xl font-bold">اطلاعات سریع</h2>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
             <QuickCard label="هزینه چالش" labelEn="Challenge Fee" value={formatMoney(firm.challengeFee.fee, firm.challengeFee.currency, 0)} sub={<>حساب <span className="num">{sizeLabel(firm.challengeFee.accountSize)}</span></>} />
-            <QuickCard label="تارگت سود" labelEn="Profit Target" value={`${pct(firm.profitTarget.phase1)}${firm.profitTarget.phase2 !== null ? ` / ${pct(firm.profitTarget.phase2)}` : ""}`} sub="مرحله ۱ / مرحله ۲" />
+            <QuickCard label="تارگت سود" labelEn="Profit Target" value={<TargetSplit firm={firm} />} />
             <QuickCard label="دراداون روزانه" labelEn="Daily Drawdown" value={pct(firm.dailyDrawdown.value)} sub={firm.dailyDrawdown.basis} />
             <QuickCard label="دراداون کلی" labelEn="Maximum Drawdown" value={pct(firm.maxDrawdown.value)} sub={firm.maxDrawdown.basis} />
             <QuickCard label="تقسیم سود" labelEn="Profit Split" value={splitLabel(firm)} />
@@ -186,14 +183,15 @@ export default async function PropFirmPage({ params }: PageProps<"/prop-firms/[s
                   <div className={`card h-full p-5 ${funded ? "border-accent/40" : ""}`}>
                     <div className="flex items-center justify-between">
                       <span className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${funded ? "bg-accent text-accent-contrast" : "bg-surface"}`}>{funded ? <Icon name="check" size={16} /> : toFaDigits(i + 1)}</span>
-                      <span className="latin text-xs text-muted">{funded ? "Funded" : `Step ${i + 1}`}</span>
+                      <span className="text-xs text-muted">{funded ? "حساب Funded" : `مرحله ${toFaDigits(i + 1)}`}</span>
                     </div>
                     <h3 className="latin mt-4 font-bold">{p.name}</h3>
                     <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
                       <div><dt className="text-xs text-muted">تارگت</dt><dd className="num mt-0.5 font-semibold">{funded ? "—" : pct(p.profitTarget)}</dd></div>
-                      <div><dt className="text-xs text-muted">دراداون روزانه / کلی</dt><dd className="num mt-0.5 font-semibold">{p.dailyDrawdown}% / {p.maxDrawdown}%</dd></div>
                       <div><dt className="text-xs text-muted">حداقل روز</dt><dd className="mt-0.5 font-semibold">{daysLabel(p.minTradingDays)}</dd></div>
-                      <div><dt className="text-xs text-muted">محدودیت زمانی</dt><dd className="mt-0.5 font-semibold">{p.timeLimit}</dd></div>
+                      <div><dt className="text-xs text-muted">دراداون روزانه</dt><dd className="num mt-0.5 font-semibold">{pct(p.dailyDrawdown)}</dd></div>
+                      <div><dt className="text-xs text-muted">دراداون کلی</dt><dd className="num mt-0.5 font-semibold">{pct(p.maxDrawdown)}</dd></div>
+                      <div className="col-span-2"><dt className="text-xs text-muted">محدودیت زمانی</dt><dd className="mt-0.5 font-semibold">{p.timeLimit}</dd></div>
                     </dl>
                   </div>
                 </Reveal>
@@ -244,24 +242,6 @@ export default async function PropFirmPage({ params }: PageProps<"/prop-firms/[s
           <p className="mt-2 text-sm leading-7 text-muted">{firm.accessNote}</p>
         </section>
 
-        {/* FAQ */}
-        {firm.faq.length > 0 && (
-          <section aria-labelledby="faq">
-            <h2 id="faq" className="mb-4 text-xl font-bold">سؤالات متداول</h2>
-            <div className="space-y-2">
-              {firm.faq.map((q) => (
-                <details key={q.question} className="card group p-5 [&_summary::-webkit-details-marker]:hidden">
-                  <summary className="flex cursor-pointer items-center justify-between gap-4 font-medium">
-                    {q.question}
-                    <Icon name="chevron-down" className="shrink-0 transition group-open:rotate-180" />
-                  </summary>
-                  <p className="mt-3 text-sm leading-7 text-muted">{q.answer}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-        )}
-
         {/* Last review */}
         <section aria-labelledby="updated" className="card flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
           <div>
@@ -284,7 +264,7 @@ export default async function PropFirmPage({ params }: PageProps<"/prop-firms/[s
 
         <div className="flex flex-col gap-3 sm:flex-row">
           <LinkButton href={`/compare/?firms=${firm.slug}`} variant="secondary">مقایسه با سایر پراپ‌فرم‌ها</LinkButton>
-          <LinkButton href="/tools/#drawdown" variant="ghost">محاسبه دراداون برای این حساب</LinkButton>
+          <LinkButton href="/tools/#margin" variant="ghost">محاسبه مارجین</LinkButton>
         </div>
       </div>
     </article>

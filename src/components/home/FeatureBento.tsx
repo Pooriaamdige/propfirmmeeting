@@ -56,7 +56,7 @@ const TILES: Tile[] = [
   { href: "/markets/", icon: "candles", title: "بازارهای زنده", en: "Live Markets", text: "طلا، فارکس و کریپتو با نمودار تعاملی." },
   { href: "/news/", icon: "zap", title: "اخبار مهم", en: "Forex Factory", text: "اخبار پراهمیت به وقت تهران." },
   { href: "/economic-calendar/", icon: "calendar", title: "تقویم اقتصادی", en: "Calendar", text: "فیلتر ارز و اهمیت، چهار منطقه زمانی." },
-  { href: "/tools/", icon: "calculator", title: "ابزار تریدر", en: "Tools", text: "محاسبه حجم معامله و دراداون." },
+  { href: "/tools/", icon: "calculator", title: "ابزار ترید", en: "Tools", text: "محاسبه حجم معامله و مارجین." },
   { href: "/lottery/", icon: "gift", title: "قرعه‌کشی", en: "Giveaway", text: "در قرعه‌کشی‌های دوره‌ای شرکت کن." },
 ];
 

@@ -1,5 +1,5 @@
 import "server-only";
-import { count } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import type { DB } from "./index";
 import * as schema from "./schema";
 import { seedPropFirms } from "@/data/seed-prop-firms";
@@ -58,6 +58,18 @@ export async function seed(db: DB) {
 
   if (settings.n === 0) {
     await db.insert(schema.siteSettings).values(Object.entries(DEFAULT_SETTINGS).map(([key, value]) => ({ key, value })));
+  } else {
+    // Copy fix for databases seeded with the first hero text; admin-edited text is left alone.
+    const [row] = await db.select().from(schema.siteSettings).where(eq(schema.siteSettings.key, "hero"));
+    const hero = row?.value as { highlight?: string; subtitle?: string } | undefined;
+    if (hero && (hero.highlight === "پراپ‌فرم را دقیق بررسی کن" || hero.subtitle?.includes("را در یکجا مقایسه کن"))) {
+      const next = {
+        ...hero,
+        highlight: hero.highlight === "پراپ‌فرم را دقیق بررسی کن" ? DEFAULT_SETTINGS.hero.highlight : hero.highlight,
+        subtitle: hero.subtitle?.replace("را در یکجا مقایسه کن", "را یکجا مقایسه کن"),
+      };
+      await db.update(schema.siteSettings).set({ value: next }).where(eq(schema.siteSettings.key, "hero"));
+    }
   }
 
   if (coupons.n === 0) {

@@ -187,7 +187,7 @@ export function sessionOf(iso: string): string {
   if (london && ny) return "london-ny";
   if (london) return "london";
   if (ny) return "newyork";
-  return "asia";
+  return h >= 21 ? "sydney" : "asia"; // after New York closes only Sydney trades; from 00:00 UTC Tokyo opens
 }
 
 function bucketize(trades: JTrade[], keysOf: (t: JTrade) => string[], order?: string[]): Bucket[] {
@@ -431,7 +431,7 @@ export function computeStats(account: JAccount, allTrades: JTrade[], transaction
     byTag: bucketize(closed, (t) => t.tags),
     byMistake: bucketize(closed, (t) => t.mistakes).sort((a, b) => a.net - b.net),
     byEmotion: bucketize(closed, (t) => [t.emotion]),
-    bySession: bucketize(closed, (t) => [sessionOf(t.openedAt)], ["asia", "london", "london-ny", "newyork"]),
+    bySession: bucketize(closed, (t) => [sessionOf(t.openedAt)], ["sydney", "asia", "london", "london-ny", "newyork"]),
     byWeekday: bucketize(closed, (t) => [partsIn(t.openedAt, tz).weekday], WEEKDAYS).filter((b, i) => i < 5 || b.trades > 0),
     byHour: bucketize(closed, (t) => [String(partsIn(t.openedAt, tz).hour)], Array.from({ length: 24 }, (_, h) => String(h))),
     byDuration: bucketize(closed, (t) => {

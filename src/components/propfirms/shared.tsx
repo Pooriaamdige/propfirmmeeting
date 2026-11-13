@@ -58,6 +58,17 @@ export function ReviewedAt({ firm, className }: { firm: Pick<PropFirm, "lastRevi
 }
 
 export const pct = (v: number | null) => (v === null ? "—" : `${v}%`);
+/** Phase targets with their phase names, in reading order (RTL), so "10% / 5%" can't be read backwards. */
+export function TargetSplit({ firm, className }: { firm: Pick<PropFirm, "profitTarget">; className?: string }) {
+  const { phase1, phase2 } = firm.profitTarget;
+  if (phase2 === null) return <span className="num">{pct(phase1)}</span>;
+  return (
+    <span className={cn("flex flex-wrap items-baseline gap-x-3 gap-y-0.5", className)}>
+      <span className="whitespace-nowrap"><span className="text-[0.8em] font-normal text-muted">مرحله ۱: </span><span className="num">{pct(phase1)}</span></span>
+      <span className="whitespace-nowrap"><span className="text-[0.8em] font-normal text-muted">مرحله ۲: </span><span className="num">{pct(phase2)}</span></span>
+    </span>
+  );
+}
 export const feeLabel = (f: PropFirm) => `${formatMoney(f.challengeFee.fee, f.challengeFee.currency, 0)}`;
 export const sizeLabel = (n: number) => `$${n >= 1000 ? `${n / 1000}K` : n}`;
 export const daysLabel = (d: number | null) => (d === null ? "—" : d === 0 ? "ندارد" : `${toFaDigits(d)} روز`);

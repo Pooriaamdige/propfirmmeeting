@@ -20,7 +20,7 @@ const PAGES: SearchResult[] = [
   { kind: "page", title: "قرعه‌کشی", subtitle: "Giveaway", href: "/lottery/" },
   { kind: "page", title: "تقویم اقتصادی", subtitle: "Economic Calendar", href: "/economic-calendar/" },
   { kind: "page", title: "محاسبه‌گر پراپ و حجم معامله", subtitle: "Position Size Calculator", href: "/tools/#position-size" },
-  { kind: "page", title: "محاسبه‌گر دراداون", subtitle: "Drawdown Calculator", href: "/tools/#drawdown" },
+  { kind: "page", title: "محاسبه‌گر مارجین", subtitle: "Margin Calculator", href: "/tools/#margin" },
   { kind: "page", title: "اخبار مهم بازار", subtitle: "Forex Factory News", href: "/news/" },
   { kind: "page", title: "بازارهای جهانی و نمودار", subtitle: "Markets", href: "/markets/" },
 ];

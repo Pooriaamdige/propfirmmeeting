@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { PropFirm } from "@/lib/types";
-import { RuleBadge, daysLabel, feeLabel, pct, sizeLabel, splitLabel } from "./shared";
+import { RuleBadge, TargetSplit, daysLabel, feeLabel, pct, sizeLabel, splitLabel } from "./shared";
 
 export interface CompareRow {
   id: string;
@@ -16,7 +16,7 @@ const ruleScore = (s: string) => (s === "allowed" ? 2 : s === "restricted" ? 1 :
 
 export const COMPARE_ROWS: CompareRow[] = [
   { id: "fee", label: "هزینه چالش", labelEn: "Challenge Fee", render: (f) => <span className="num">{feeLabel(f)} <span className="text-faint">/ {sizeLabel(f.challengeFee.accountSize)}</span></span>, value: (f) => f.challengeFee.fee / f.challengeFee.accountSize * (f.challengeFee.currency === "EUR" ? 1.08 : 1), better: "low" },
-  { id: "target", label: "تارگت سود", labelEn: "Profit Target", render: (f) => <span className="num">{pct(f.profitTarget.phase1)}{f.profitTarget.phase2 !== null && ` / ${pct(f.profitTarget.phase2)}`}</span>, value: (f) => (f.profitTarget.phase1 ?? 0) + (f.profitTarget.phase2 ?? 0), better: "low" },
+  { id: "target", label: "تارگت سود", labelEn: "Profit Target", render: (f) => <TargetSplit firm={f} />, value: (f) => (f.profitTarget.phase1 ?? 0) + (f.profitTarget.phase2 ?? 0), better: "low" },
   { id: "daily", label: "دراداون روزانه", labelEn: "Daily Drawdown", render: (f) => <span className="num">{pct(f.dailyDrawdown.value)}</span>, value: (f) => f.dailyDrawdown.value, better: "high" },
   { id: "max", label: "دراداون کلی", labelEn: "Max Drawdown", render: (f) => <span><span className="num">{pct(f.maxDrawdown.value)}</span> <span className="latin text-[11px] text-faint">{f.maxDrawdown.type}</span></span>, value: (f) => f.maxDrawdown.value, better: "high" },
   { id: "split", label: "تقسیم سود", labelEn: "Profit Split", render: (f) => <span className="num">{splitLabel(f)}</span>, value: (f) => f.profitSplit.max, better: "high" },

@@ -7,6 +7,7 @@ import type { Quote } from "@/lib/types";
 import { Change } from "@/components/ui/Change";
 import { DataStatus } from "@/components/ui/DataStatus";
 import { Icon } from "@/components/ui/Icon";
+import { DragMarquee } from "@/components/fx/DragMarquee";
 
 function TickerItem({ q }: { q: Quote }) {
   return (
@@ -42,20 +43,13 @@ export function Ticker() {
           </button>
         </div>
       ) : (
-        <div className="ticker overflow-hidden motion-reduce:overflow-x-auto" dir="ltr">
-          <div className="ticker-track flex w-max">
-            <ul className="flex">
-              {data.map((q) => (
-                <TickerItem key={q.symbol} q={q} />
-              ))}
-            </ul>
-            <ul className="flex motion-reduce:hidden" aria-hidden>
-              {data.map((q) => (
-                <TickerItem key={q.symbol} q={q} />
-              ))}
-            </ul>
-          </div>
-        </div>
+        <DragMarquee speed={40} label="نوار قیمت؛ برای جابجایی بکشید">
+          <ul className="flex">
+            {data.map((q) => (
+              <TickerItem key={q.symbol} q={q} />
+            ))}
+          </ul>
+        </DragMarquee>
       )}
       {envelope && (
         <div className="mx-auto flex max-w-7xl justify-end px-4 pb-1.5 sm:px-6 lg:px-8">

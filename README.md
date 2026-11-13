@@ -63,9 +63,9 @@ The browser only calls our own `/api/*` endpoints. The server fetches from provi
 
 | Asset | Default chain (`MARKET_FX_PROVIDERS` / `MARKET_CRYPTO_PROVIDERS`) | Notes |
 | --- | --- | --- |
-| Forex, XAUUSD, DXY | `oanda,twelvedata,yahoo` | **OANDA** gives free real-time spot prices with a demo account token (`OANDA_API_TOKEN`). DXY is calculated from its six components with the ICE formula and labelled as such. Twelve Data is metered (`TWELVEDATA_CREDITS_PER_MINUTE`; calls past the budget are skipped). Yahoo is a keyless fallback that serves gold as COMEX futures and often rate-limits proxy/datacenter IPs |
+| Forex, XAUUSD, NAS100, DXY | `oanda,twelvedata,yahoo` | **OANDA** gives free real-time spot prices with a demo account token (`OANDA_API_TOKEN`). DXY is calculated from its six components with the ICE formula and labelled as such. Twelve Data is metered (`TWELVEDATA_CREDITS_PER_MINUTE`; calls past the budget are skipped). Yahoo is a keyless fallback that serves gold as COMEX futures and often rate-limits proxy/datacenter IPs |
 | BTC, ETH | `binance,coinbase,yahoo` | All keyless |
-| Calendar / news | Forex Factory weekly feed | Cached 30 min. The next-week file is only published late in the week |
+| Calendar / news | Forex Factory weekly feed | Cached 30 min. The next-week file is only published late in the week. The free feed has **no actual values**: set `JBLANKED_API_KEY` (free key at jblanked.com, Forex Factory data with actuals) or `FMP_API_KEY` (financialmodelingprep.com) and released events get their actual figure, refreshed every 5 min |
 
 - Forex refreshes every `MARKET_FX_QUOTE_TTL_SECONDS` (default 10 s with OANDA, 60 s without) and crypto every `MARKET_CRYPTO_QUOTE_TTL_SECONDS` (default 5 s). One upstream request per interval serves every visitor.
 - If a refresh fails, the last good data is shown for up to 15 minutes **with its original timestamp**. After that the UI shows «اطلاعات لحظه‌ای موقتاً در دسترس نیست» with a retry button. Fake prices are never shown.
@@ -90,7 +90,7 @@ The browser only calls our own `/api/*` endpoints. The server fetches from provi
 | `/coupons/` | **Coupon codes**: ticket cards with one-click copy, filter by firm, sort, expiry countdown, copy analytics |
 | `/markets/` | Interactive chart (candles/line, 1m–1D), overview, session clock |
 | `/news/`, `/economic-calendar/` | Forex Factory feed and calendar with timezone switch |
-| `/tools/` | Position size and drawdown calculators |
+| `/tools/` | Position size (from $2.5K accounts) and margin calculators |
 | `/blog/` | Articles |
 | `/lottery/` | Active lottery campaign + registration form |
 | `/journal/` | **Trading journal** for registered users (see below) |

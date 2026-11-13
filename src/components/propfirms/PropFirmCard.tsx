@@ -4,7 +4,7 @@ import { buttonClass } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { CompareButton } from "./CompareButton";
 import { SpotlightCard } from "@/components/fx/Spotlight";
-import { FirmLogo, ReviewBadge, ReviewedAt, RuleBadge, daysLabel, feeLabel, pct, sizeLabel, splitLabel } from "./shared";
+import { FirmLogo, ReviewBadge, ReviewedAt, RuleBadge, TargetSplit, daysLabel, feeLabel, pct, sizeLabel, splitLabel } from "./shared";
 
 function Stat({ label, labelEn, children }: { label: string; labelEn: string; children: React.ReactNode }) {
   return (
@@ -51,10 +51,7 @@ export function PropFirmCard({ firm }: { firm: PropFirm }) {
           <span className="num">{pct(firm.maxDrawdown.value)}</span>
         </Stat>
         <Stat label="تارگت" labelEn="Target">
-          <span className="num">
-            {pct(firm.profitTarget.phase1)}
-            {firm.profitTarget.phase2 !== null && ` / ${pct(firm.profitTarget.phase2)}`}
-          </span>
+          <TargetSplit firm={firm} />
         </Stat>
         <Stat label="حداقل روز" labelEn="Min days">
           {daysLabel(firm.minimumTradingDays)}

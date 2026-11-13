@@ -7,6 +7,8 @@ import { reportFailure, reportSuccess } from "@/lib/services/health";
 import type { CalendarProvider } from "./calendar/provider";
 import { forexFactoryProvider } from "./calendar/forexFactoryProvider";
 import { mockCalendarProvider } from "./calendar/mockProvider";
+import { mergeActuals, type ActualRow } from "./calendar/actuals";
+import { ACTUALS_SOURCES } from "./calendar/actualSources";
 
 function provider(): CalendarProvider {
   const configured = process.env.CALENDAR_PROVIDER ?? "forexfactory";
@@ -29,6 +31,44 @@ async function weekEvents(p: CalendarProvider, week: "this" | "next"): Promise<{
     },
     6 * 3600_000,
   );
+}
+
+/**
+ * Actual figures for released events (the Forex Factory feed has none). Uses the first configured
+ * source that answers; refreshed every 5 minutes. Failures leave the events as they are.
+ */
+async function withActuals(events: EconomicEvent[]): Promise<EconomicEvent[]> {
+  const now = Date.now();
+  if (!events.some((e) => !e.actual && !e.allDay && Date.parse(e.datetime) <= now)) return events;
+  const sources = ACTUALS_SOURCES.filter((s) => s.enabled());
+  if (!sources.length) return events;
+  const times = events.map((e) => Date.parse(e.datetime));
+  const from = new Date(Math.min(...times) - 86400_000).toISOString().slice(0, 10);
+  const to = new Date(Math.min(Math.max(...times), now) + 86400_000).toISOString().slice(0, 10);
+  let rows: ActualRow[] = [];
+  for (const src of sources) {
+    try {
+      rows = await cached(
+        `calendar:actuals:${src.name}:${from}:${to}`,
+        5 * 60_000,
+        async () => {
+          try {
+            const r = await src.fetch(from, to);
+            reportSuccess(src.name, "calendar");
+            return r;
+          } catch (err) {
+            reportFailure(src.name, "calendar", err);
+            throw err;
+          }
+        },
+        60 * 60_000,
+      );
+      break;
+    } catch {
+      /* try the next source */
+    }
+  }
+  return mergeActuals(events, rows, now);
 }
 
 /** Add `days` calendar days to a YYYY-MM-DD key. */
@@ -70,7 +110,7 @@ export async function getEconomicCalendar(range: CalendarRange, timeZone: string
     .sort((a, b) => a.datetime.localeCompare(b.datetime));
 
   return {
-    data: events,
+    data: p.isMock ? events : await withActuals(events),
     source: p.name,
     isMock: p.isMock,
     fetchedAt: parts.map((x) => x.fetchedAt).sort()[0],

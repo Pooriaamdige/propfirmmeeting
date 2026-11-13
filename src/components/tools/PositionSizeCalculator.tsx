@@ -8,7 +8,7 @@ import type { Quote, SymbolCode } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { Field, Output, inputClass, parseNum } from "./Field";
 
-const PRESETS = [10000, 25000, 50000, 100000, 200000];
+const PRESETS = [2500, 5000, 10000, 25000, 50000, 100000, 200000];
 
 /** USD value of one pip for one standard lot. */
 export function pipValuePerLot(symbol: SymbolCode, price: number): number {

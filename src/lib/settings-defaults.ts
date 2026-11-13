@@ -8,8 +8,8 @@ export interface SiteSettings {
 export const DEFAULT_SETTINGS: SiteSettings = {
   hero: {
     title: "قبل از خرید چالش،",
-    highlight: "پراپ‌فرم را دقیق بررسی کن",
-    subtitle: "شرایط، قوانین، هزینه، دراداون، تقسیم سود و اعتبار پراپ‌فرم‌ها را در یکجا مقایسه کن — و با کدهای تخفیف اختصاصی ارزان‌تر بخر.",
+    highlight: "پراپ‌فرم مورد نظر را دقیق بررسی کن",
+    subtitle: "شرایط، قوانین، هزینه، دراداون، تقسیم سود و اعتبار پراپ‌فرم‌ها را یکجا مقایسه کن — و با کدهای تخفیف اختصاصی ارزان‌تر بخر.",
   },
   announcement: { enabled: false, text: "", href: "" },
   social: { telegram: "https://t.me/", instagram: "https://instagram.com/", x: "https://x.com/", email: "mailto:hello@example.com" },

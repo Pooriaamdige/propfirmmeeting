@@ -88,7 +88,7 @@ export const EMOTIONS: { id: string; label: string; emoji: string }[] = [
   { id: "angry", label: "عصبی", emoji: "😠" },
 ];
 
-export const SESSION_LABELS: Record<string, string> = { asia: "آسیا (توکیو)", london: "لندن", "london-ny": "همپوشانی لندن/نیویورک", newyork: "نیویورک" };
+export const SESSION_LABELS: Record<string, string> = { sydney: "سیدنی", asia: "آسیا (توکیو)", london: "لندن", "london-ny": "همپوشانی لندن/نیویورک", newyork: "نیویورک" };
 export const WEEKDAY_LABELS: Record<string, string> = { Mon: "دوشنبه", Tue: "سه‌شنبه", Wed: "چهارشنبه", Thu: "پنجشنبه", Fri: "جمعه", Sat: "شنبه", Sun: "یکشنبه" };
 export const ACCOUNT_TYPES: { id: string; label: string }[] = [
   { id: "challenge", label: "چالش پراپ" },

@@ -8,5 +8,5 @@ export const NAV_ITEMS = [
   { href: "/economic-calendar/", label: "تقویم اقتصادی" },
   { href: "/journal/", label: "ژورنال" },
   { href: "/tools/", label: "ابزارها" },
-  { href: "/blog/", label: "آموزش" },
+  { href: "/blog/", label: "مقالات" },
 ] as const;

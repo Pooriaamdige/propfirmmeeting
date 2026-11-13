@@ -29,14 +29,15 @@ export const SYMBOLS: Record<SymbolCode, SymbolMeta> = {
   USDCHF: { code: "USDCHF", label: "USD/CHF", faName: "دلار / فرانک", digits: 5, assetClass: "forex", pipSize: 0.0001, contractSize: 100000, twelveData: "USD/CHF", yahoo: "CHF=X", mockAnchor: 0.7962 },
   BTCUSD: { code: "BTCUSD", label: "BTC/USD", faName: "بیت‌کوین", digits: 2, assetClass: "crypto", pipSize: 1, contractSize: 1, binance: "BTCUSDT", coinbase: "BTC-USD", yahoo: "BTC-USD", mockAnchor: 108420 },
   ETHUSD: { code: "ETHUSD", label: "ETH/USD", faName: "اتریوم", digits: 2, assetClass: "crypto", pipSize: 0.1, contractSize: 1, binance: "ETHUSDT", coinbase: "ETH-USD", yahoo: "ETH-USD", mockAnchor: 4312.5 },
+  NAS100: { code: "NAS100", label: "NAS100", faName: "نزدک ۱۰۰", digits: 2, assetClass: "index", pipSize: 1, contractSize: 1, yahoo: "^NDX", mockAnchor: 25120 },
   DXY: { code: "DXY", label: "DXY", faName: "شاخص دلار", digits: 3, assetClass: "index", pipSize: 0.01, contractSize: 1, twelveData: "DXY", yahoo: "DX-Y.NYB", mockAnchor: 97.42 },
 };
 
 export const ALL_SYMBOLS = Object.keys(SYMBOLS) as SymbolCode[];
-export const TICKER_SYMBOLS: SymbolCode[] = ["XAUUSD", "EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCAD", "USDCHF", "BTCUSD", "ETHUSD"];
-export const HERO_SYMBOLS: SymbolCode[] = ["XAUUSD", "EURUSD", "GBPUSD", "BTCUSD"];
-export const OVERVIEW_SYMBOLS: SymbolCode[] = ["XAUUSD", "EURUSD", "GBPUSD", "USDJPY", "BTCUSD", "DXY"];
-export const CHART_SYMBOLS: SymbolCode[] = ["XAUUSD", "EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCAD", "BTCUSD", "ETHUSD"];
+export const TICKER_SYMBOLS: SymbolCode[] = ["XAUUSD", "EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCAD", "USDCHF", "NAS100", "BTCUSD", "ETHUSD"];
+export const HERO_SYMBOLS: SymbolCode[] = ["XAUUSD", "EURUSD", "GBPUSD", "NAS100", "BTCUSD"];
+export const OVERVIEW_SYMBOLS: SymbolCode[] = ["XAUUSD", "EURUSD", "GBPUSD", "USDJPY", "NAS100", "DXY", "BTCUSD", "ETHUSD"];
+export const CHART_SYMBOLS: SymbolCode[] = ["XAUUSD", "EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCAD", "NAS100", "BTCUSD", "ETHUSD"];
 
 export function isSymbol(value: string | null | undefined): value is SymbolCode {
   return !!value && value in SYMBOLS;

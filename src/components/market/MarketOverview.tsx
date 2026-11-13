@@ -60,7 +60,7 @@ export function MarketOverview() {
   return (
     <div>
       {loading && !data ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-busy>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-busy>
           {OVERVIEW_SYMBOLS.map((s) => (
             <div key={s} className="card space-y-4 p-5">
               <Skeleton className="h-4 w-24" />
@@ -74,7 +74,7 @@ export function MarketOverview() {
       ) : (
         <>
           {error && <ErrorState compact message={error} lastUpdated={envelope?.fetchedAt} onRetry={retry} />}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {data.map((item) => (
               <OverviewCard key={item.quote.symbol} item={item} />
             ))}

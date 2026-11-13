@@ -3,6 +3,7 @@
 import { animate, motion, useInView, useReducedMotion, type Variants } from "motion/react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import { DragMarquee } from "./DragMarquee";
 import { toFaDigits } from "@/lib/format";
 
 const ease = [0.2, 0.7, 0.2, 1] as const;
@@ -75,15 +76,10 @@ export function NumberTicker({ value, suffix = "", persian = true, className }: 
 }
 
 /** Infinite horizontal marquee (pauses on hover; static under reduced motion). */
-export function Marquee({ children, className, duration = 40, reverse = false }: { children: ReactNode; className?: string; duration?: number; reverse?: boolean }) {
+export function Marquee({ children, className, speed = 45, reverse = false }: { children: ReactNode; className?: string; speed?: number; reverse?: boolean }) {
   return (
-    <div className={cn("marquee group overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)]", className)} dir="ltr">
-      <div className="marquee-track flex w-max gap-4 group-hover:[animation-play-state:paused]" style={{ animationDuration: `${duration}s`, animationDirection: reverse ? "reverse" : "normal" }}>
-        <div className="flex shrink-0 gap-4">{children}</div>
-        <div className="flex shrink-0 gap-4 motion-reduce:hidden" aria-hidden>
-          {children}
-        </div>
-      </div>
-    </div>
+    <DragMarquee speed={speed} reverse={reverse} trackClassName="gap-4 pe-4" className={cn("[mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)]", className)}>
+      {children}
+    </DragMarquee>
   );
 }

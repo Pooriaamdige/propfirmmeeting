@@ -21,7 +21,7 @@ const COLUMNS = [
     title: "ابزارها",
     links: [
       { href: "/tools/#position-size", label: "محاسبه‌گر ریسک" },
-      { href: "/tools/#drawdown", label: "محاسبه‌گر دراداون" },
+      { href: "/tools/#margin", label: "محاسبه‌گر مارجین" },
       { href: "/tools/#position-size", label: "Position Size" },
     ],
   },

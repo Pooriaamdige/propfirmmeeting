@@ -7,7 +7,7 @@ export function FirmMarquee({ firms }: { firms: PropFirm[] }) {
   if (firms.length === 0) return null;
   const list = firms.length < 6 ? [...firms, ...firms] : firms;
   return (
-    <Marquee duration={36}>
+    <Marquee speed={50}>
       {list.map((f, i) => (
         <Link key={`${f.slug}-${i}`} href={`/prop-firms/${f.slug}/`} className="flex items-center gap-3 rounded-xl border border-line bg-card/60 px-4 py-2.5 backdrop-blur transition hover:border-accent/40">
           <FirmLogo firm={f} size={30} />

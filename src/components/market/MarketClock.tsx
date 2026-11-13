@@ -7,9 +7,10 @@ import { cn } from "@/lib/cn";
 
 const CITIES = [
   { tz: "Asia/Tehran", label: "تهران" },
+  { tz: "Australia/Sydney", label: "سیدنی" },
+  { tz: "Asia/Tokyo", label: "توکیو" },
   { tz: "Europe/London", label: "لندن" },
   { tz: "America/New_York", label: "نیویورک" },
-  { tz: "Asia/Tokyo", label: "توکیو" },
 ];
 
 function duration(mins: number) {
@@ -53,8 +54,8 @@ export function MarketClock({ className }: { className?: string }) {
         <span className={cn("rounded-full px-2.5 py-1 text-xs font-medium", weekend ? "bg-warn/10 text-warn" : "bg-pos/10 text-pos")}>{weekend ? "بازار فارکس تعطیل است" : "بازار فارکس باز است"}</span>
       </div>
       <div className="grid grid-cols-2 gap-px border-b border-line bg-line">
-        {CITIES.map((c) => (
-          <div key={c.tz} className="bg-card px-5 py-4">
+        {CITIES.map((c, i) => (
+          <div key={c.tz} className={cn("bg-card px-5 py-4", i === 0 && "col-span-2")}>
             <p className="text-xs text-muted">{c.label}</p>
             <p className="num mt-1 text-xl font-bold tracking-tight" suppressHydrationWarning>
               {now ? formatClock(now, c.tz) : "--:--:--"}
@@ -63,7 +64,7 @@ export function MarketClock({ className }: { className?: string }) {
         ))}
       </div>
       <ul className="space-y-3 px-5 py-4">
-        {SESSIONS.filter((s) => s.id !== "sydney").map((s) => {
+        {SESSIONS.map((s) => {
           const st = now ? sessionStatus(now, s) : null;
           return (
             <li key={s.id} className="text-sm">

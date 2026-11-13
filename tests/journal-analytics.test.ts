@@ -118,6 +118,7 @@ test("sessions and z-score", () => {
   assert.equal(sessionOf("2026-09-01T09:00:00Z"), "london");
   assert.equal(sessionOf("2026-09-01T13:00:00Z"), "london-ny");
   assert.equal(sessionOf("2026-09-01T18:00:00Z"), "newyork");
+  assert.equal(sessionOf("2026-09-01T22:00:00Z"), "sydney");
   // Alternating results → more runs than chance → positive Z (a win tends to be followed by a loss)
   assert.ok((zScore([true, false, true, false, true, false, true, false]) ?? 0) > 2);
   // Clustered results → fewer runs → negative Z

@@ -4,7 +4,7 @@ import { getJson } from "@/lib/services/http";
 import type { MarketSource } from "../provider";
 
 /**
- * OANDA v20 REST API — real-time spot forex and XAU/USD. A free demo ("practice")
+ * OANDA v20 REST API — real-time spot forex, XAU/USD and the NAS100 index CFD. A free demo ("practice")
  * account token is enough: https://www.oanda.com → open a demo account → Manage API Access.
  *
  *   OANDA_API_TOKEN   required
@@ -25,6 +25,7 @@ const INSTRUMENT: Partial<Record<SymbolCode, string>> = {
   AUDUSD: "AUD_USD",
   USDCAD: "USD_CAD",
   USDCHF: "USD_CHF",
+  NAS100: "NAS100_USD",
 };
 
 // ICE U.S. Dollar Index: 50.14348112 × EURUSD^-0.576 × USDJPY^0.136 × GBPUSD^-0.119 × USDCAD^0.091 × USDSEK^0.042 × USDCHF^0.036

@@ -86,6 +86,7 @@ export type SymbolCode =
   | "USDCHF"
   | "BTCUSD"
   | "ETHUSD"
+  | "NAS100"
   | "DXY";
 
 export interface Quote {
