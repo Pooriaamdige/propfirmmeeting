@@ -4,6 +4,7 @@ import type { PropFirm } from "@/lib/types";
 import { db, schema } from "@/lib/db";
 import { remember } from "./contentCache";
 import { emptyFirm, type FirmData } from "@/lib/firm-defaults";
+import { normalizePersianCopy } from "@/lib/persian-copy";
 
 type Row = typeof schema.propFirms.$inferSelect;
 
@@ -25,7 +26,7 @@ function withDefaults(data: Partial<FirmData> | null | undefined): FirmData {
 }
 
 export function rowToFirm(r: Row): PropFirm {
-  return { ...withDefaults(r.data as Partial<FirmData>), id: String(r.id), dbId: r.id, slug: r.slug, name: r.name, published: r.published, featured: r.featured };
+  return normalizePersianCopy({ ...withDefaults(r.data as Partial<FirmData>), id: String(r.id), dbId: r.id, slug: r.slug, name: r.name, published: r.published, featured: r.featured });
 }
 
 /** Published firms in admin-defined order. */

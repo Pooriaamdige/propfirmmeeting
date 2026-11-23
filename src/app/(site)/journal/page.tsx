@@ -21,9 +21,9 @@ export const metadata: Metadata = {
 };
 
 const FEATURES: { icon: IconName; title: string; text: string }[] = [
-  { icon: "edit", title: "ثبت سریع معاملات", text: "ورود دستی با محاسبه خودکار پیپ، سود و R — یا وارد کردن یکجا با فایل CSV" },
+  { icon: "edit", title: "ثبت سریع معاملات", text: "ورود دستی با محاسبه خودکار پیپ، سود و R، یا وارد کردن یکجا با فایل CSV" },
   { icon: "chart", title: "آمار حرفه‌ای", text: "Gain، Win Rate، Profit Factor، Expectancy، Sharpe، Z-Score، دراداون و ۲۰+ شاخص دیگر" },
-  { icon: "shield", title: "پایش قوانین پراپ", text: "دراداون روزانه و کلی، تارگت، حداقل روز و قانون ثبات — با هشدار پیش از نقض" },
+  { icon: "shield", title: "پایش قوانین پراپ", text: "دراداون روزانه و کلی، تارگت، حداقل روز و قانون ثبات، با هشدار پیش از نقض" },
   { icon: "calendar", title: "تحلیل زمان", text: "تقویم سود/زیان، عملکرد بر اساس روز هفته، ساعت و سشن معاملاتی" },
   { icon: "layers", title: "ستاپ، نماد و تگ", text: "بفهم کدام ستاپ و کدام نماد واقعاً برایت سود می‌سازد" },
   { icon: "alert", title: "هزینه اشتباهات", text: "ببین هر اشتباه (FOMO، جابجایی SL، …) چقدر از حسابت برده است" },
@@ -35,7 +35,7 @@ export default async function JournalPage() {
   if (!user) {
     return (
       <>
-        <PageHeader eyebrow="Trading Journal" title="ژورنال معاملاتی" subtitle="معاملاتت را ثبت کن و با آمار دقیق بفهم کجا سود می‌کنی و کجا ضرر — مخصوص تریدرهای پراپ.">
+        <PageHeader eyebrow="Trading Journal" title="ژورنال معاملاتی" subtitle="معاملاتت را ثبت کن و با آمار دقیق بفهم کجا سود می‌کنی و کجا ضرر، مخصوص تریدرهای پراپ.">
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <LinkButton href="/register/?next=/journal/" size="lg">
               ساخت ژورنال رایگان <Icon name="arrow-left" size={18} />

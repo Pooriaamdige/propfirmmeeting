@@ -9,7 +9,7 @@ import { Icon } from "@/components/ui/Icon";
 
 export const metadata: Metadata = {
   title: "پراپ‌فرم‌های مورد بررسی",
-  description: "لیست پراپ‌فرم‌های فارکس با هزینه چالش، تارگت، دراداون روزانه و کلی، تقسیم سود، قوانین خبر و آخر هفته — همراه با تاریخ آخرین بررسی.",
+  description: "لیست پراپ‌فرم‌های فارکس با هزینه چالش، تارگت، دراداون روزانه و کلی، تقسیم سود، قوانین خبر و آخر هفته، همراه با تاریخ آخرین بررسی.",
   alternates: { canonical: "/prop-firms/" },
   openGraph: { url: "/prop-firms/", title: "پراپ‌فرم‌های مورد بررسی" },
 };

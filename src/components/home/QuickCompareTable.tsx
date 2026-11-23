@@ -20,7 +20,7 @@ export function QuickCompareTable({ firms }: { firms: PropFirm[] }) {
   return (
     <div className="card scrollbar-thin overflow-x-auto [contain:paint]" role="region" aria-label="جدول مقایسه سریع" tabIndex={0}>
       <table className="w-full min-w-[860px] text-sm">
-        <caption className="sr-only">مقایسه سریع شرایط اصلی پراپ‌فرم‌ها — برای مرتب‌سازی روی عنوان ستون کلیک کنید</caption>
+        <caption className="sr-only">مقایسه سریع شرایط اصلی پراپ‌فرم‌ها، برای مرتب‌سازی روی عنوان ستون کلیک کنید</caption>
         <thead>
           <tr className="border-b border-line text-xs text-muted">
             <th scope="col" className="sticky start-0 z-[1] bg-card px-5 py-3 text-start font-medium">

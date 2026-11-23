@@ -25,7 +25,7 @@ export function CouponForm({ firms, coupon }: { firms: { id: number; name: strin
           </Field>
           <Field label="پراپ‌فرم" hint="اختیاری">
             <Select name="firmId" defaultValue={coupon?.firmId ?? ""}>
-              <option value="">— بدون پراپ‌فرم —</option>
+              <option value="">بدون پراپ‌فرم</option>
               {firms.map((f) => (
                 <option key={f.id} value={f.id}>
                   {f.name}

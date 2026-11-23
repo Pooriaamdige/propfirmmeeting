@@ -22,6 +22,10 @@ export default async function LotteryPage() {
     <>
       <PageHeader eyebrow="Giveaway" title="در قرعه‌کشی ما شرکت کن" subtitle="با ثبت اطلاعاتت، در قرعه‌کشی‌های دوره‌ای شرکت کن." />
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="card mb-8 flex flex-col gap-4 border-accent-2/25 bg-accent-2/5 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3"><Icon name="trophy" size={25} className="shrink-0 text-accent-2" /><div><h2 className="font-bold">برندگان هفته‌های گذشته</h2><p className="mt-1 text-sm text-muted">ببینید چه کسانی، چه حسابی و از کدام پراپ‌فرم برنده شده‌اند.</p></div></div>
+          <LinkButton href="/lottery-winners/" variant="secondary">مشاهده برندگان <Icon name="arrow-left" size={16} /></LinkButton>
+        </div>
         {!campaign ? (
           <EmptyState icon="gift" title="در حال حاضر قرعه‌کشی فعالی نداریم." description="دوره بعدی به‌زودی اعلام می‌شود. با عضویت در خبرنامه زودتر باخبر شو." action={<LinkButton href="/#newsletter" variant="secondary">عضویت در خبرنامه</LinkButton>} />
         ) : (

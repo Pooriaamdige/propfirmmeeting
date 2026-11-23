@@ -18,7 +18,7 @@ export function DataStatus({ fetchedAt, source, isMock, stale, className, timeZo
           منبع: <span className="latin">{source}</span>
         </span>
       )}
-      {isMock && <span className="rounded border border-warn/40 bg-warn/10 px-1.5 py-0.5 text-[11px] font-medium text-warn">داده نمایشی — غیر زنده</span>}
+      {isMock && <span className="rounded border border-warn/40 bg-warn/10 px-1.5 py-0.5 text-[11px] font-medium text-warn">داده نمایشی، غیر زنده</span>}
       {stale && !isMock && <span className="text-neg">اتصال قطع است</span>}
     </p>
   );

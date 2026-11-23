@@ -40,6 +40,7 @@ const NAV: { href: string; label: string; icon: IconName; adminOnly?: boolean }[
   { href: "/admin/coupons/", label: "کدهای تخفیف", icon: "gift" },
   { href: "/admin/articles/", label: "مقالات", icon: "book" },
   { href: "/admin/lottery/", label: "قرعه‌کشی", icon: "sparkle" },
+  { href: "/admin/lottery-winners/", label: "برندگان قرعه‌کشی", icon: "trophy" },
   { href: "/admin/newsletter/", label: "خبرنامه", icon: "mail" },
   { href: "/admin/settings/", label: "تنظیمات سایت", icon: "filter", adminOnly: true },
   { href: "/admin/users/", label: "مدیران", icon: "user", adminOnly: true },
@@ -50,7 +51,8 @@ export function AdminNav({ role, onNavigate }: { role: "admin" | "editor"; onNav
   return (
     <nav aria-label="منوی مدیریت" className="space-y-1">
       {NAV.filter((n) => !n.adminOnly || role === "admin").map((n) => {
-        const active = n.href === "/admin/" ? pathname === "/admin" || pathname === "/admin/" : pathname.startsWith(n.href.replace(/\/$/, ""));
+        const base = n.href.replace(/\/$/, "");
+        const active = n.href === "/admin/" ? pathname === "/admin" || pathname === "/admin/" : pathname === base || pathname.startsWith(`${base}/`);
         return (
           <Link
             key={n.href}

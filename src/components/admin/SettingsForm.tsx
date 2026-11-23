@@ -12,10 +12,10 @@ export function SettingsForm({ settings: s }: { settings: SiteSettings }) {
     <form action={action} className="space-y-4">
       <Panel title="بخش اصلی صفحه نخست (Hero)">
         <div className="grid gap-4 md:grid-cols-2">
-          <Field label="تیتر — خط اول">
+          <Field label="تیتر، خط اول">
             <Input name="hero.title" defaultValue={s.hero.title} required />
           </Field>
-          <Field label="تیتر — بخش رنگی">
+          <Field label="تیتر، بخش رنگی">
             <Input name="hero.highlight" defaultValue={s.hero.highlight} required />
           </Field>
           <Field label="زیرتیتر" className="md:col-span-2">

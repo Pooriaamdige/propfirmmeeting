@@ -3,11 +3,12 @@ import { desc, eq } from "drizzle-orm";
 import type { LotteryCampaign } from "@/lib/types";
 import { db, schema } from "@/lib/db";
 import { remember } from "./contentCache";
+import { normalizePersianCopy } from "@/lib/persian-copy";
 
 type Row = typeof schema.lotteryCampaigns.$inferSelect;
 
 export function rowToCampaign(r: Row): LotteryCampaign {
-  return { id: r.id, slug: r.slug, title: r.title, description: r.description, prize: r.prize, startsAt: r.startsAt?.toISOString() ?? null, endsAt: r.endsAt?.toISOString() ?? null, active: r.active };
+  return normalizePersianCopy({ id: r.id, slug: r.slug, title: r.title, description: r.description, prize: r.prize, startsAt: r.startsAt?.toISOString() ?? null, endsAt: r.endsAt?.toISOString() ?? null, active: r.active });
 }
 
 /** The campaign currently accepting registrations, if any. */

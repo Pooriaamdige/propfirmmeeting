@@ -102,7 +102,7 @@ export default async function HomePage() {
 
       {/* What you get */}
       <Section id="features" labelledBy="features-title">
-        <SectionHeader id="features-title" eyebrow="Everything in one place" title="هر چیزی که قبل از خرید چالش لازم داری" subtitle="از بررسی قوانین تا کد تخفیف و داده‌های زنده بازار — هر بخش صفحه اختصاصی خودش را دارد." />
+        <SectionHeader id="features-title" eyebrow="Everything in one place" title="هر چیزی که قبل از خرید چالش لازم داری" subtitle="از بررسی قوانین تا کد تخفیف و داده‌های زنده بازار، هر بخش صفحه اختصاصی خودش را دارد." />
         <FeatureBento />
       </Section>
 
@@ -189,7 +189,7 @@ export default async function HomePage() {
                     <Icon name="gift" size={24} />
                   </span>
                   <h2 className="mt-5 text-2xl font-black md:text-3xl">در قرعه‌کشی ما شرکت کن</h2>
-                  <p className="mt-3 leading-8 text-muted">{campaign.title}{campaign.prize ? ` — جایزه: ${campaign.prize}` : ""}</p>
+                  <p className="mt-3 leading-8 text-muted">{campaign.title}{campaign.prize ? `، جایزه: ${campaign.prize}` : ""}</p>
                 </div>
                 <LinkButton href="/lottery/" size="lg" className="mt-8 w-full sm:w-auto">
                   ثبت‌نام در قرعه‌کشی <Icon name="arrow-left" size={18} />

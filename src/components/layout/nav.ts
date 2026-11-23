@@ -3,6 +3,7 @@ export const NAV_ITEMS = [
   { href: "/prop-firms/", label: "پراپ‌فرم‌ها" },
   { href: "/compare/", label: "مقایسه" },
   { href: "/coupons/", label: "کد تخفیف" },
+  { href: "/lottery-winners/", label: "برندگان قرعه‌کشی" },
   { href: "/markets/", label: "بازارها" },
   { href: "/news/", label: "اخبار" },
   { href: "/economic-calendar/", label: "تقویم اقتصادی" },

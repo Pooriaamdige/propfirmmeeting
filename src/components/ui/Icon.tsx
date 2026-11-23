@@ -1,6 +1,7 @@
 import type { SVGProps } from "react";
 
 const paths = {
+  trophy: <><path d="M8 3h8v6a4 4 0 0 1-8 0V3ZM8 5H4v2a4 4 0 0 0 4 4M16 5h4v2a4 4 0 0 1-4 4M12 13v5M8 21h8M9 18h6v3H9z" /></>,
   search: <><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></>,
   menu: <><path d="M4 6h16M4 12h16M4 18h16" /></>,
   x: <><path d="M18 6 6 18M6 6l12 12" /></>,

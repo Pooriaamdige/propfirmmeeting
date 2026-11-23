@@ -9,6 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [firms, articles] = await Promise.all([getPropFirms(), getArticles()]);
   const now = new Date();
   const staticPages: MetadataRoute.Sitemap = [
+    { url: absoluteUrl("/lottery-winners/"), changeFrequency: "weekly", priority: 0.7, lastModified: now },
     { url: absoluteUrl("/"), changeFrequency: "hourly", priority: 1, lastModified: now },
     { url: absoluteUrl("/prop-firms/"), changeFrequency: "weekly", priority: 0.9, lastModified: now },
     { url: absoluteUrl("/compare/"), changeFrequency: "weekly", priority: 0.8, lastModified: now },

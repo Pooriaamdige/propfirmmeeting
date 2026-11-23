@@ -77,9 +77,9 @@ export async function seed(db: DB) {
     const rows = await db.select({ id: schema.propFirms.id, slug: schema.propFirms.slug }).from(schema.propFirms);
     const idOf = (slug: string) => rows.find((r) => r.slug === slug)?.id ?? null;
     await db.insert(schema.coupons).values([
-      { firmId: idOf("fundingpips"), title: "تخفیف چالش FundingPips", code: "SAMPLE-FP10", discountLabel: "۱۰٪ تخفیف", discountPercent: 10, description: "کد نمونه — از پنل مدیریت با کد واقعی جایگزین کنید.", terms: "برای همه سایزهای حساب 2-Step.", featured: true, active: !isProd, sortOrder: 0 },
-      { firmId: idOf("the5ers"), title: "تخفیف The5ers High Stakes", code: "SAMPLE-5ERS", discountLabel: "۵٪ تخفیف", discountPercent: 5, description: "کد نمونه — از پنل مدیریت با کد واقعی جایگزین کنید.", terms: "فقط برای خرید اول.", active: !isProd, sortOrder: 1 },
-      { firmId: idOf("fundednext"), title: "تخفیف FundedNext Stellar", code: "SAMPLE-FN15", discountLabel: "۱۵٪ تخفیف", discountPercent: 15, description: "کد نمونه — از پنل مدیریت با کد واقعی جایگزین کنید.", terms: "قابل استفاده تا پایان ماه.", active: !isProd, sortOrder: 2 },
+      { firmId: idOf("fundingpips"), title: "تخفیف چالش FundingPips", code: "SAMPLE-FP10", discountLabel: "۱۰٪ تخفیف", discountPercent: 10, description: "کد نمونه، از پنل مدیریت با کد واقعی جایگزین کنید.", terms: "برای همه سایزهای حساب 2-Step.", featured: true, active: !isProd, sortOrder: 0 },
+      { firmId: idOf("the5ers"), title: "تخفیف The5ers High Stakes", code: "SAMPLE-5ERS", discountLabel: "۵٪ تخفیف", discountPercent: 5, description: "کد نمونه، از پنل مدیریت با کد واقعی جایگزین کنید.", terms: "فقط برای خرید اول.", active: !isProd, sortOrder: 1 },
+      { firmId: idOf("fundednext"), title: "تخفیف FundedNext Stellar", code: "SAMPLE-FN15", discountLabel: "۱۵٪ تخفیف", discountPercent: 15, description: "کد نمونه، از پنل مدیریت با کد واقعی جایگزین کنید.", terms: "قابل استفاده تا پایان ماه.", active: !isProd, sortOrder: 2 },
     ]);
   }
 

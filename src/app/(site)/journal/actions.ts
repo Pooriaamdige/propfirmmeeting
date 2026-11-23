@@ -210,7 +210,7 @@ export async function importTradesAction(_: JournalState, fd: FormData): Promise
     });
     if (!parsed.success) {
       const issue = parsed.error.issues[0];
-      errors.push(`ردیف ${line}: ${issue.path.join(".")} — ${issue.message}`);
+      errors.push(`ردیف ${line}: ${issue.path.join(".")}، ${issue.message}`);
       continue;
     }
     const t = enrich(parsed.data);

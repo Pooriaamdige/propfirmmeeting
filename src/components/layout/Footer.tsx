@@ -12,6 +12,7 @@ const COLUMNS = [
       { href: "/compare/", label: "مقایسه" },
       { href: "/coupons/", label: "کدهای تخفیف" },
       { href: "/lottery/", label: "قرعه‌کشی" },
+      { href: "/lottery-winners/", label: "برندگان قرعه‌کشی" },
       { href: "/markets/", label: "بازارها" },
       { href: "/news/", label: "اخبار" },
       { href: "/economic-calendar/", label: "تقویم اقتصادی" },

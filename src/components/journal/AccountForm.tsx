@@ -68,7 +68,7 @@ export function AccountForm({ value, firms }: { value: AccountFormValue; firms: 
           </Field>
           <Field label="پراپ‌فرم" hint="انتخاب از لیست، قوانین را پر می‌کند">
             <Select name="firmId" value={firmId} onChange={(e) => pickFirm(e.target.value)}>
-              <option value="">— بدون پراپ / سایر —</option>
+              <option value="">بدون پراپ / سایر</option>
               {firms.map((f) => (
                 <option key={f.id} value={f.id}>
                   {f.name}

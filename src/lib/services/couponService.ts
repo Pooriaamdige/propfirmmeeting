@@ -3,12 +3,13 @@ import { and, asc, desc, eq, sql } from "drizzle-orm";
 import type { Coupon } from "@/lib/types";
 import { db, schema } from "@/lib/db";
 import { remember, invalidateContent } from "./contentCache";
+import { normalizePersianCopy } from "@/lib/persian-copy";
 
 type CouponRow = typeof schema.coupons.$inferSelect;
 type FirmRow = typeof schema.propFirms.$inferSelect;
 
 export function rowToCoupon(c: CouponRow, f: FirmRow | null): Coupon {
-  return {
+  return normalizePersianCopy({
     id: c.id,
     firm: f ? { id: f.id, slug: f.slug, name: f.name, logo: f.data.logo, website: f.data.website } : null,
     title: c.title,
@@ -23,7 +24,7 @@ export function rowToCoupon(c: CouponRow, f: FirmRow | null): Coupon {
     featured: c.featured,
     active: c.active,
     copyCount: c.copyCount,
-  };
+  });
 }
 
 /** Active coupons that have started and not expired. */

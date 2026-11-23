@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function MarketsPage() {
   return (
     <>
-      <PageHeader eyebrow="Markets" title="بازارهای جهانی" subtitle="نمودار تعاملی، وضعیت امروز بازار و سشن‌های فعال — همه با ذکر منبع و زمان آخرین بروزرسانی." />
+      <PageHeader eyebrow="Markets" title="بازارهای جهانی" subtitle="نمودار تعاملی، وضعیت امروز بازار و سشن‌های فعال، همه با ذکر منبع و زمان آخرین بروزرسانی." />
       <Ticker />
       <div className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8">
         <Suspense>

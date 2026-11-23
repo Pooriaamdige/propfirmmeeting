@@ -1,5 +1,6 @@
 import { boolean, date, doublePrecision, index, integer, jsonb, pgTable, serial, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
 import type { PropFirm } from "@/lib/types";
+import type { LotteryWinner } from "@/lib/lottery-winners";
 
 const ts = (name: string) => timestamp(name, { withTimezone: true });
 
@@ -63,6 +64,17 @@ export const lotteryCampaigns = pgTable("lottery_campaigns", {
   endsAt: ts("ends_at"),
   active: boolean("active").default(false).notNull(),
   createdAt: ts("created_at").defaultNow().notNull(),
+});
+
+/** Sequential giveaway weeks; sponsor/account labels remain historical snapshots. */
+export const lotteryWeeks = pgTable("lottery_weeks", {
+  id: serial("id").primaryKey(),
+  week: integer("week").notNull().unique(),
+  drawnOn: date("drawn_on"),
+  published: boolean("published").default(false).notNull(),
+  winners: jsonb("winners").$type<LotteryWinner[]>().default([]).notNull(),
+  createdAt: ts("created_at").defaultNow().notNull(),
+  updatedAt: ts("updated_at").defaultNow().notNull(),
 });
 
 export const lotteryRegistrations = pgTable(

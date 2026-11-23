@@ -50,7 +50,7 @@ function CompareVisual() {
 }
 
 const TILES: Tile[] = [
-  { href: "/prop-firms/", icon: "shield", title: "بررسی پراپ‌فرم‌ها", en: "Prop Firm Reviews", text: "قوانین، دراداون، تقسیم سود، هزینه و شرایط برداشت هر پراپ‌فرم — با تاریخ آخرین بررسی و منبع رسمی.", className: "md:col-span-2 md:row-span-2", visual: <BarsVisual /> },
+  { href: "/prop-firms/", icon: "shield", title: "بررسی پراپ‌فرم‌ها", en: "Prop Firm Reviews", text: "قوانین، دراداون، تقسیم سود، هزینه و شرایط برداشت هر پراپ‌فرم، با تاریخ آخرین بررسی و منبع رسمی.", className: "md:col-span-2 md:row-span-2", visual: <BarsVisual /> },
   { href: "/coupons/", icon: "ticket", title: "کدهای تخفیف", en: "Coupons", text: "کدهای اختصاصی پراپ‌فرم‌های همکار؛ با یک کلیک کپی کن.", className: "md:col-span-2", visual: <TicketVisual /> },
   { href: "/compare/", icon: "scale", title: "مقایسه کنار هم", en: "Compare", text: "تا ۴ پراپ‌فرم را ردیف‌به‌ردیف مقایسه کن.", visual: <CompareVisual /> },
   { href: "/markets/", icon: "candles", title: "بازارهای زنده", en: "Live Markets", text: "طلا، فارکس و کریپتو با نمودار تعاملی." },

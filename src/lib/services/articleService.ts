@@ -3,11 +3,12 @@ import { desc, eq } from "drizzle-orm";
 import type { Article, ArticleCategory } from "@/lib/types";
 import { db, schema } from "@/lib/db";
 import { remember } from "./contentCache";
+import { normalizePersianCopy } from "@/lib/persian-copy";
 
 type Row = typeof schema.articles.$inferSelect;
 
 export function rowToArticle(r: Row): Article {
-  return {
+  return normalizePersianCopy({
     id: r.id,
     slug: r.slug,
     title: r.title,
@@ -19,7 +20,7 @@ export function rowToArticle(r: Row): Article {
     published: r.published,
     publishedAt: r.publishedAt.toISOString(),
     updatedAt: r.updatedAt.toISOString(),
-  };
+  });
 }
 
 export async function getArticles(): Promise<Article[]> {

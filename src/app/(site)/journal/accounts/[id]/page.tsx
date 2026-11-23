@@ -438,7 +438,7 @@ function Analysis({ stats: s, currency: c }: { stats: JournalStats; currency: st
         )}
       </Card>
       <Card title="هزینه اشتباهات">
-        <BreakdownTable rows={s.byMistake} currency={c} label="اشتباه" empty="اشتباهی ثبت نشده — یا خیلی منضبطی، یا هنوز ثبتشان نکرده‌ای." />
+        <BreakdownTable rows={s.byMistake} currency={c} label="اشتباه" empty="اشتباهی ثبت نشده، یا خیلی منضبطی، یا هنوز ثبتشان نکرده‌ای." />
       </Card>
       <Card title="بر اساس حس و حال">
         <BreakdownTable rows={s.byEmotion} currency={c} label="حس" labelOf={emoLabel} empty="حس و حال را هنگام ثبت معامله انتخاب کن." />

@@ -76,7 +76,7 @@ export function Wordmark({ size = "md", className }: { size?: "sm" | "md" | "lg"
 
 export function Logo() {
   return (
-    <Link href="/" className="group flex items-center rounded-md transition-opacity hover:opacity-90" aria-label="PropFirm Meeting — صفحه اصلی">
+    <Link href="/" className="group flex items-center rounded-md transition-opacity hover:opacity-90" aria-label="PropFirm Meeting، صفحه اصلی">
       <Wordmark />
     </Link>
   );

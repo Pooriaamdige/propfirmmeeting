@@ -19,9 +19,10 @@ export default async function AdminLottery({ searchParams }: PageProps<"/admin/l
 
   return (
     <>
+      <Link href="/admin/lottery-winners/" className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-accent"><Icon name="trophy" size={17} /> مدیریت برندگان هفتگی <Icon name="arrow-left" size={15} /></Link>
       <PageTitle
         title="قرعه‌کشی"
-        subtitle="کمپین‌ها و ثبت‌نام‌کنندگان — در هر زمان فقط یک کمپین فعال است"
+        subtitle="کمپین‌ها و ثبت‌نام‌کنندگان، در هر زمان فقط یک کمپین فعال است"
         action={
           <Link href="/admin/lottery/?edit=new" className={buttonClass("primary")}>
             <Icon name="plus" size={16} /> کمپین جدید
@@ -61,7 +62,7 @@ export default async function AdminLottery({ searchParams }: PageProps<"/admin/l
       {selected && (
         <Panel
           className="mt-6"
-          title={`ثبت‌نام‌کنندگان — ${selected}`}
+          title={`ثبت‌نام‌کنندگان، ${selected}`}
           actions={
             <a href={`/admin/export/registrations/?campaign=${encodeURIComponent(selected)}`} className={buttonClass("secondary", "sm")}>
               <Icon name="download" size={14} /> خروجی CSV

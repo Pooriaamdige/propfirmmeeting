@@ -108,6 +108,7 @@ The browser only calls our own `/api/*` endpoints. The server fetches from provi
 | `/tools/` | Position size (from $2.5K accounts) and margin calculators |
 | `/blog/` | Articles |
 | `/lottery/` | Active lottery campaign + registration form |
+| `/lottery-winners/` | Published weekly giveaway results, with searchable week archive |
 | `/journal/` | **Trading journal** for registered users (see below) |
 | `/login/`, `/register/`, `/account/` | Site user accounts (separate from admins) |
 | `/admin/` | Admin panel |
@@ -128,6 +129,10 @@ A Myfxbook-style journal. Trades are entered **manually** (or imported from CSV)
 The admin dashboard shows the number of journal users and recorded trades. Analytics live in `src/lib/journal/analytics.ts` (pure functions, covered by `npm test`).
 
 ## Admin panel (`/admin`)
+
+Weekly giveaway results are managed separately at **/admin/lottery-winners/** (also linked from the lottery admin page). Add a week, starting with week 52 by default, then use **+ افزودن برنده** to add as many winner rows as needed. Each row records the winner's email, account prize (for example `$5K`), and sponsor prop firm. Firm suggestions are available, and historical sponsor names can also be entered directly. Week numbers are sequential giveaway editions and can continue beyond 53; older weeks can be entered manually. The draw date is optional and entered in Gregorian format, then displayed in Persian on the site.
+
+New weeks are drafts until **انتشار نتایج این هفته** is checked. Publishing requires at least one complete winner and makes the full winner emails public. Drafts remain private, including direct week URLs. Published results open on the highest week number by default; visitors can choose or search older weeks. Uncheck publication to withdraw results, or delete a week after confirmation. The new database table is created automatically by the existing startup migration flow; no existing campaigns or registrations are changed. No winner data is seeded.
 
 | Section | What you can do |
 | --- | --- |

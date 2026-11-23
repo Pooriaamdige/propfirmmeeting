@@ -12,7 +12,7 @@ export default async function RegisterPage({ searchParams }: PageProps<"/registe
   const next = safe((await searchParams).next);
   if (await getCurrentUser()) redirect(next);
   return (
-    <AuthShell title="ساخت حساب رایگان" subtitle="ژورنال معاملات، آمار و پایش قوانین پراپ — رایگان.">
+    <AuthShell title="ساخت حساب رایگان" subtitle="ژورنال معاملات، آمار و پایش قوانین پراپ، رایگان.">
       <RegisterForm next={next} />
     </AuthShell>
   );

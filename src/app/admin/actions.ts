@@ -11,6 +11,7 @@ import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import { invalidateContent } from "@/lib/services/contentCache";
 import { articleSchema, campaignSchema, couponSchema, firmSchema, settingsSchema, userSchema } from "@/lib/admin-schemas";
 import { clearFailures, recordFailure, tooManyFailures } from "@/lib/spam";
+import { lotteryWeekSchema } from "@/lib/lottery-winners";
 
 export type FormState = { error?: string; fieldErrors?: Record<string, string[] | undefined>; ok?: boolean; email?: string } | null;
 
@@ -170,6 +171,40 @@ export async function deleteArticleAction(fd: FormData) {
 }
 
 /* --------------------------------- Lottery -------------------------------- */
+
+export async function saveLotteryWeekAction(_: FormState, fd: FormData): Promise<FormState> {
+  await requireAdmin();
+  const idValue = String(fd.get("id") ?? "");
+  const id = idValue ? Number(idValue) : null;
+  if (id !== null && (!Number.isSafeInteger(id) || id < 1)) return fail("شناسه هفته معتبر نیست.");
+  let raw: unknown;
+  try { raw = JSON.parse(String(fd.get("payload") ?? "")); }
+  catch { return fail("داده فرم نامعتبر است."); }
+  const parsed = lotteryWeekSchema.safeParse(raw);
+  if (!parsed.success) return fail(parsed.error.issues[0].message);
+  const d = await db();
+  try {
+    if (id) {
+      const rows = await d.update(schema.lotteryWeeks).set({ ...parsed.data, updatedAt: new Date() }).where(eq(schema.lotteryWeeks.id, id)).returning({ id: schema.lotteryWeeks.id });
+      if (!rows.length) return fail("این هفته پیدا نشد. صفحه را دوباره باز کنید.");
+    } else await d.insert(schema.lotteryWeeks).values(parsed.data);
+  } catch (err) {
+    if (isUnique(err)) return fail("این شماره هفته قبلاً ثبت شده است. همان هفته را ویرایش کنید.");
+    throw err;
+  }
+  refresh("/lottery-winners/", "/admin/lottery-winners/");
+  redirect("/admin/lottery-winners/?saved=1");
+}
+
+export async function deleteLotteryWeekAction(fd: FormData) {
+  await requireAdmin();
+  const id = Number(fd.get("id"));
+  if (!Number.isSafeInteger(id) || id < 1) return;
+  const d = await db();
+  await d.delete(schema.lotteryWeeks).where(eq(schema.lotteryWeeks.id, id));
+  refresh("/lottery-winners/", "/admin/lottery-winners/");
+  redirect("/admin/lottery-winners/?saved=1");
+}
 
 export async function saveCampaignAction(_: FormState, fd: FormData): Promise<FormState> {
   await requireAdmin();
