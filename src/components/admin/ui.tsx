@@ -6,7 +6,7 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 export function PageTitle({ title, subtitle, action, back }: { title: string; subtitle?: string; action?: ReactNode; back?: { href: string; label: string } }) {
   return (
     <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-      <div>
+      <div className="min-w-0 break-words">
         {back && (
           <Link href={back.href} className="mb-2 inline-flex items-center gap-1 text-xs text-muted hover:text-fg">
             <Icon name="arrow-right" size={13} />
@@ -23,10 +23,10 @@ export function PageTitle({ title, subtitle, action, back }: { title: string; su
 
 export function Panel({ title, children, className, actions }: { title?: string; children: ReactNode; className?: string; actions?: ReactNode }) {
   return (
-    <section className={cn("card p-5", className)}>
+    <section className={cn("card min-w-0 max-w-full p-4 sm:p-5", className)}>
       {(title || actions) && (
-        <div className="mb-4 flex items-center justify-between gap-3">
-          {title && <h2 className="font-bold">{title}</h2>}
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          {title && <h2 className="min-w-0 break-words font-bold">{title}</h2>}
           {actions}
         </div>
       )}
@@ -36,12 +36,12 @@ export function Panel({ title, children, className, actions }: { title?: string;
 }
 
 export const inputCls =
-  "h-10 w-full rounded-lg border border-line bg-surface/60 px-3 text-sm outline-none transition placeholder:text-faint focus:border-accent/60 focus:bg-card aria-[invalid=true]:border-neg/60";
+  "h-11 min-w-0 w-full max-w-full rounded-lg border border-line bg-surface/60 px-3 text-sm outline-none transition placeholder:text-faint focus:border-accent/60 focus:bg-card aria-[invalid=true]:border-neg/60";
 
 export function Field({ label, hint, error, children, className }: { label: string; hint?: string; error?: string; children: ReactNode; className?: string }) {
   return (
-    <label className={cn("block", className)}>
-      <span className="mb-1.5 flex items-baseline justify-between gap-2 text-sm font-medium">
+    <label className={cn("block min-w-0", className)}>
+      <span className="mb-1.5 flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1 text-sm font-medium">
         {label}
         {hint && <span className="text-[11px] font-normal text-faint">{hint}</span>}
       </span>
@@ -85,45 +85,39 @@ export function Badge({ tone = "muted", children }: { tone?: "pos" | "neg" | "wa
 }
 
 export function Table({ head, children, empty }: { head: ReactNode[]; children: ReactNode; empty?: boolean }) {
+  if (empty) return <div className="card min-w-0 px-4 py-10 text-center text-sm text-muted">موردی ثبت نشده است.</div>;
   return (
-    <div className="card scrollbar-thin overflow-x-auto">
-      <table className="w-full min-w-[640px] text-sm">
-        <thead>
-          <tr className="border-b border-line text-xs text-muted">
-            {head.map((h, i) => (
-              <th key={i} className="px-4 py-3 text-start font-medium">
-                {h}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-line">
-          {empty ? (
-            <tr>
-              <td colSpan={head.length} className="px-4 py-10 text-center text-muted">
-                موردی ثبت نشده است.
-              </td>
+    <div className="min-w-0 max-w-full">
+      <p className="mb-2 text-[11px] text-faint sm:hidden">برای دیدن همه ستون‌ها، جدول را به طرفین بکشید.</p>
+      <div className="card scrollbar-thin min-w-0 max-w-full overflow-x-auto overscroll-x-contain" role="region" aria-label="جدول مدیریت، قابل پیمایش افقی" tabIndex={0}>
+        <table className="w-full min-w-[640px] text-sm">
+          <thead>
+            <tr className="border-b border-line text-xs text-muted">
+              {head.map((h, i) => (
+                <th key={i} className="px-4 py-3 text-start font-medium">
+                  {h}
+                </th>
+              ))}
             </tr>
-          ) : (
-            children
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-line">{children}</tbody>
+        </table>
+      </div>
     </div>
   );
 }
 
 export function StatCard({ label, value, icon, href, tone }: { label: string; value: ReactNode; icon: IconName; href?: string; tone?: "accent" | "gold" }) {
   const body = (
-    <div className="card group relative overflow-hidden p-5 transition hover:border-line-strong">
+    <div className="card group relative h-full min-w-0 overflow-hidden p-3 transition hover:border-line-strong sm:p-5">
       <div className="pointer-events-none absolute -end-8 -top-8 h-24 w-24 rounded-full bg-accent/10 blur-2xl transition group-hover:bg-accent/20" />
-      <div className="flex items-center justify-between">
-        <span className="text-sm text-muted">{label}</span>
-        <span className={cn("flex h-9 w-9 items-center justify-center rounded-lg", tone === "gold" ? "bg-accent-2/10 text-accent-2" : "bg-accent/10 text-accent")}>
+      <div className="flex items-start justify-between gap-2">
+        <span className="min-w-0 text-xs leading-6 text-muted sm:text-sm">{label}</span>
+        <span className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg sm:h-9 sm:w-9", tone === "gold" ? "bg-accent-2/10 text-accent-2" : "bg-accent/10 text-accent")}>
           <Icon name={icon} size={17} />
         </span>
       </div>
-      <p className="num mt-3 text-3xl font-bold">{value}</p>
+      <p className="num mt-3 text-2xl font-bold sm:text-3xl">{value}</p>
     </div>
   );
   return href ? <Link href={href}>{body}</Link> : body;

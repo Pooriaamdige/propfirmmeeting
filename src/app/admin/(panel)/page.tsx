@@ -38,7 +38,7 @@ export default async function Dashboard({ searchParams }: PageProps<"/admin">) {
     <>
       <PageTitle title="داشبورد" subtitle="نمای کلی محتوا، ثبت‌نام‌ها و وضعیت منابع داده زنده" />
       <Flash error={sp.error === "forbidden" ? "دسترسی این بخش فقط برای مدیر کل است." : null} />
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3">
         <StatCard label="پراپ‌فرم‌ها" value={firms.n} icon="shield" href="/admin/prop-firms/" />
         <StatCard label="کدهای تخفیف فعال" value={coupons.n} icon="ticket" href="/admin/coupons/" tone="gold" />
         <StatCard label="کپی کدهای تخفیف" value={Number(copies.n ?? 0)} icon="copy" href="/admin/coupons/" />
@@ -56,11 +56,11 @@ export default async function Dashboard({ searchParams }: PageProps<"/admin">) {
               const s = status[k];
               return (
                 <div key={k} className="rounded-lg border border-line p-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="font-medium">{k === "market" ? "قیمت‌های بازار" : "تقویم اقتصادی / اخبار"}</span>
                     {s.ok ? <Badge tone={s.isMock ? "warn" : "pos"}>{s.isMock ? "داده نمایشی" : "زنده"}</Badge> : <Badge tone="neg">قطع</Badge>}
                   </div>
-                  <p className="mt-1.5 text-xs text-muted" dir={s.ok ? undefined : "ltr"}>
+                  <p className="mt-1.5 text-xs text-muted [overflow-wrap:anywhere]" dir={s.ok ? undefined : "ltr"}>
                     {s.ok ? <>منبع: <span dir="ltr">{s.source}</span> · {s.count} مورد · {fmtDate(s.at)}</> : s.error}
                   </p>
                 </div>

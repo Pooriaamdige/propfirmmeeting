@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const user = await requireAdmin();
   return (
-    <div className="min-h-dvh lg:grid lg:grid-cols-[250px_1fr]">
+    <div className="min-h-dvh min-w-0 w-full lg:grid lg:grid-cols-[250px_minmax(0,1fr)]">
       <aside className="sticky top-0 hidden h-dvh flex-col border-e border-line bg-surface/50 p-4 lg:flex">
         <Link href="/admin/" className="mb-8 mt-2 px-2">
           <Wordmark size="sm" />
@@ -53,7 +53,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
             </form>
           </div>
         </header>
-        <div className="mx-auto max-w-6xl px-4 py-8 lg:px-8">{children}</div>
+        <main className="mx-auto min-w-0 w-full max-w-6xl px-4 py-6 sm:py-8 lg:px-8">{children}</main>
       </div>
     </div>
   );

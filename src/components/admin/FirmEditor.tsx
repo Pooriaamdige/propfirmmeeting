@@ -164,7 +164,7 @@ export function FirmEditor({ initial, id }: { initial: FirmFormValue; id: number
         <p className="mb-2 mt-5 text-sm font-medium">جدول هزینه بر اساس سایز حساب</p>
         <div className="space-y-2">
           {d.feeTiers.map((t, i) => (
-            <div key={i} className="grid grid-cols-[1fr_1fr_90px_40px] gap-2">
+            <div key={i} className="grid grid-cols-2 gap-2 rounded-lg border border-line p-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_90px_44px] sm:border-0 sm:p-0">
               <Input type="number" placeholder="سایز حساب" value={t.accountSize} onChange={(e) => setData({ feeTiers: d.feeTiers.map((x, j) => (j === i ? { ...x, accountSize: numOr(e.target.value) } : x)) })} dir="ltr" />
               <Input type="number" step="0.01" placeholder="هزینه" value={t.fee} onChange={(e) => setData({ feeTiers: d.feeTiers.map((x, j) => (j === i ? { ...x, fee: numOr(e.target.value) } : x)) })} dir="ltr" />
               <Select value={t.currency} onChange={(e) => setData({ feeTiers: d.feeTiers.map((x, j) => (j === i ? { ...x, currency: e.target.value as "USD" | "EUR" } : x)) })}>
@@ -337,8 +337,8 @@ export function FirmEditor({ initial, id }: { initial: FirmFormValue; id: number
         <p className="mb-2 mt-6 text-sm font-medium">منابع رسمی</p>
         <div className="space-y-2">
           {d.sources.map((s, i) => (
-            <div key={i} className="grid grid-cols-[1fr_1.5fr_40px] gap-2">
-              <Input placeholder="عنوان" value={s.label} onChange={(e) => setData({ sources: d.sources.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)) })} dir="ltr" />
+            <div key={i} className="grid grid-cols-[minmax(0,1fr)_44px] gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)_44px]">
+              <Input className="col-span-2 sm:col-span-1" placeholder="عنوان" value={s.label} onChange={(e) => setData({ sources: d.sources.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)) })} dir="ltr" />
               <Input placeholder="https://" value={s.url} onChange={(e) => setData({ sources: d.sources.map((x, j) => (j === i ? { ...x, url: e.target.value } : x)) })} dir="ltr" />
               <button type="button" onClick={() => setData({ sources: d.sources.filter((_, j) => j !== i) })} className="rounded-lg text-neg hover:bg-neg/10" aria-label="حذف">
                 <Icon name="trash" size={15} className="mx-auto" />
